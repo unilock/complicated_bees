@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "complicated_bees",
+	"version": "${version}",
+	"name": "Complicated Bees",
+	"description": "A data-driven implementation of diploid bees for modern versions of minecraft",
+	"authors": [
+		"ACCBDD"
+	],
+	"contact": {
+		"sources": "https://github.com/ACCBDD/complicated_bees",
+		"issues": "https://github.com/ACCBDD/complicated_bees/issues"
+	},
+	"license": "MIT",
+	"icon": "icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.accbdd.complicated_bees.ComplicatedBees"
+		]
+	},
+	"mixins": [
+		"complicated_bees.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": ">=1.20",
+		"fabric-api": "*"
+	}
+}

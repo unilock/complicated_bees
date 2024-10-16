@@ -16,14 +16,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
 @MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 public class MutationRecipeCategory implements IRecipeCategory<Mutation> {
 
     public static final ResourceLocation ID = new ResourceLocation(MODID, "jei/mutation");

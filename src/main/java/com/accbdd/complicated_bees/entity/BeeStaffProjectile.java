@@ -54,7 +54,7 @@ public class BeeStaffProjectile extends Projectile implements ItemSupplier {
             super.tick();
 
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-            if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+            if (hitresult.getType() != HitResult.Type.MISS /*&& !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)*/) {
                 this.onHit(hitresult);
             }
 

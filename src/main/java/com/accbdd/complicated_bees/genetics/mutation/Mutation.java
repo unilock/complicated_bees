@@ -39,7 +39,7 @@ public class Mutation {
         this(first, second, result, chance, new ArrayList<>());
         List<IMutationCondition> list = getConditions();
         for (String key : conditions.getAllKeys()) {
-            IMutationCondition condition = ComplicatedBees.MUTATION_CONDITION_REGISTRY.get().getValue(ResourceLocation.tryParse(key));
+            IMutationCondition condition = ComplicatedBees.MUTATION_CONDITION_REGISTRY.get().get(ResourceLocation.tryParse(key));
             if (condition != null)
                 list.add(condition.deserialize(conditions.getCompound(key)));
             else

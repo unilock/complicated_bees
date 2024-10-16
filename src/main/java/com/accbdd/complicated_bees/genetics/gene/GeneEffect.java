@@ -37,7 +37,7 @@ public class GeneEffect extends Gene<IBeeEffect> {
     @Override
     public GeneEffect deserialize(CompoundTag tag) {
         String effectKeyString = tag.getString(DATA);
-        return new GeneEffect(effectKeyString.equals("INVALID") ? null : ComplicatedBees.BEE_EFFECT_REGISTRY.get().getValue(ResourceLocation.tryParse(effectKeyString)), tag.getBoolean(DOMINANT));
+        return new GeneEffect(effectKeyString.equals("INVALID") ? null : ComplicatedBees.BEE_EFFECT_REGISTRY.get().get(ResourceLocation.tryParse(effectKeyString)), tag.getBoolean(DOMINANT));
     }
 
     @Override

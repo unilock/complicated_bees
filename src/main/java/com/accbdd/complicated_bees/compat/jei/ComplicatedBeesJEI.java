@@ -54,18 +54,18 @@ public class ComplicatedBeesJEI implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         IIngredientSubtypeInterpreter<ItemStack> speciesInterpreter = (stack, context) -> {
-            Lazy<Species> species = Lazy.of(() -> ((GeneSpecies) GeneticHelper.getChromosome(stack, true).getGene(GeneSpecies.ID)).get());
-            ResourceLocation key = GeneticHelper.getRegistryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().getKey(species.get());
+            Species species = ((GeneSpecies) GeneticHelper.getChromosome(stack, true).getGene(GeneSpecies.ID)).get();
+            ResourceLocation key = GeneticHelper.getRegistryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().getKey(species);
             if (key == null) {
-                ComplicatedBees.LOGGER.debug("failed to find key for species {}", species.get());
+                ComplicatedBees.LOGGER.debug("failed to find key for species {}", species);
                 return "invalid";
             }
             return key.toString();
         };
 
         IIngredientSubtypeInterpreter<ItemStack> combInterpreter = (stack, context) -> {
-            Lazy<Comb> comb = Lazy.of(() -> CombItem.getComb(stack));
-            return comb.get() == null ? Comb.NULL.toString() : comb.get().toString();
+            Comb comb = CombItem.getComb(stack);
+            return comb == null ? Comb.NULL.toString() : comb.toString();
         };
 
         IIngredientSubtypeInterpreter<ItemStack> nestInterpreter = (stack, context) -> stack.getOrCreateTag().getCompound("BlockEntityTag").getString("species");

@@ -131,20 +131,15 @@ public class ComplicatedBees implements ModInitializer {
 //        modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(DataGenerators::generate);
 
-        BlocksRegistration.BLOCKS.register(modEventBus);
-        ItemsRegistration.ITEMS.register(modEventBus);
+        BlocksRegistration.register();
+        ItemsRegistration.register();
         BlockEntitiesRegistration.BLOCK_ENTITIES.register(modEventBus);
         MenuRegistration.MENU_TYPES.register(modEventBus);
         GeneRegistration.register();
         BeeEffectRegistration.EFFECTS.register(modEventBus);
         MutationRegistration.MUTATION_CONDITIONS.register(modEventBus);
         EntitiesRegistration.ENTITY_TYPE.register(modEventBus);
-        EsotericRegistration.LOOT_ITEM_FUNCTION_REGISTER.register(modEventBus);
-        EsotericRegistration.TREE_DECORATOR_REGISTER.register(modEventBus);
-        EsotericRegistration.FEATURE_REGISTER.register(modEventBus);
-        EsotericRegistration.RECIPE_TYPE_REGISTER.register(modEventBus);
-        EsotericRegistration.RECIPE_SERIALIZER_REGISTER.register(modEventBus);
-        EsotericRegistration.PARTICLE_TYPE.register(modEventBus);
+        EsotericRegistration.register();
 
         context.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 

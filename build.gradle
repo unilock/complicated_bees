@@ -33,6 +33,8 @@ repositories {
 }
 
 loom {
+	accessWidenerPath = file("src/main/resources/complicated_bees.accesswidener")
+
 	mods {
 		"complicated_bees" {
 			sourceSet sourceSets.main

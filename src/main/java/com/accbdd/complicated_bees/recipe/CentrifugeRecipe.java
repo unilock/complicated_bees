@@ -7,26 +7,23 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
 public class CentrifugeRecipe implements Recipe<Container> {
     private final ItemStack input;
@@ -50,11 +47,16 @@ public class CentrifugeRecipe implements Recipe<Container> {
         public CentrifugeRecipe fromJson(ResourceLocation location, JsonObject json) {
             JsonObject inputJson = json.getAsJsonObject("input");
             ResourceLocation inputItemLocation = ResourceLocation.tryParse(inputJson.get("item").getAsString());
-            Item inputItem = ForgeRegistries.ITEMS.getValue(inputItemLocation);
-            if (inputItem == null) throw new JsonParseException("could not parse input for " + location);
+            Item inputItem = BuiltInRegistries.ITEM.get(inputItemLocation);
+            if (inputItem == Items.AIR) throw new JsonParseException("could not parse input for " + location);
             ItemStack input = new ItemStack(inputItem);
-            if (inputJson.has("nbt"))
-                input.setTag(CraftingHelper.getNBT(inputJson.getAsJsonObject("nbt")));
+            if (inputJson.has("nbt")) {
+                var result = CompoundTag.CODEC.decode(JsonOps.INSTANCE, inputJson.getAsJsonObject("nbt"));
+                var completedResult = result.getOrThrow(false, (string) -> {
+                    throw new RuntimeException("could not parse CentrifugeRecipe nbt: " + string);
+                });
+                input.setTag(completedResult.getFirst());
+            }
 
             List<Product> outputs = new ArrayList<>();
             if (json.has("outputs")) {

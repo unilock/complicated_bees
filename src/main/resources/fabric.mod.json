@@ -22,6 +22,7 @@
 			"com.accbdd.complicated_bees.ComplicatedBeesClient"
 		]
 	},
+	"accessWidener": "complicated_bees.accesswidener",
 	"mixins": [
 		"complicated_bees.mixins.json"
 	],

@@ -1,49 +1,104 @@
 package com.accbdd.complicated_bees.block.entity;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
-public class AdaptedItemHandler implements IItemHandlerModifiable {
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
-    private final IItemHandlerModifiable handler;
+public class AdaptedItemHandler implements InventoryStorage {
 
-    public AdaptedItemHandler(IItemHandlerModifiable handler) {
+    private final InventoryStorage handler;
+
+    public AdaptedItemHandler(InventoryStorage handler) {
         this.handler = handler;
     }
 
     @Override
-    public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-        handler.setStackInSlot(slot, stack);
+    public int getSlotCount() {
+        return this.handler.getSlotCount();
     }
 
     @Override
-    public int getSlots() {
-        return handler.getSlots();
+    public SingleSlotStorage<ItemVariant> getSlot(int slot) {
+        return this.handler.getSlot(slot);
     }
 
     @Override
-    public @NotNull ItemStack getStackInSlot(int slot) {
-        return handler.getStackInSlot(slot);
+    @UnmodifiableView
+    public List<SingleSlotStorage<ItemVariant>> getSlots() {
+        return this.handler.getSlots();
     }
 
     @Override
-    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return handler.insertItem(slot, stack, simulate);
+    public boolean supportsInsertion() {
+        return this.handler.supportsInsertion();
     }
 
     @Override
-    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return handler.extractItem(slot, amount, simulate);
+    public boolean supportsExtraction() {
+        return this.handler.supportsExtraction();
     }
 
     @Override
-    public int getSlotLimit(int slot) {
-        return handler.getSlotLimit(slot);
+    public Iterator<StorageView<ItemVariant>> nonEmptyIterator() {
+        return this.handler.nonEmptyIterator();
     }
 
     @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return handler.isItemValid(slot, stack);
+    public Iterable<StorageView<ItemVariant>> nonEmptyViews() {
+        return this.handler.nonEmptyViews();
+    }
+
+    @Override
+    public long getVersion() {
+        return this.handler.getVersion();
+    }
+
+    @Override
+    public long simulateInsert(ItemVariant resource, long maxAmount, @Nullable TransactionContext transaction) {
+        return this.handler.simulateInsert(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public long simulateExtract(ItemVariant resource, long maxAmount, @Nullable TransactionContext transaction) {
+        return this.handler.simulateExtract(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public @Nullable StorageView<ItemVariant> exactView(ItemVariant resource) {
+        return this.handler.exactView(resource);
+    }
+
+    @Override
+    public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+        return this.handler.insert(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+        return this.handler.extract(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public Iterator<StorageView<ItemVariant>> iterator() {
+        return this.handler.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super StorageView<ItemVariant>> action) {
+        this.handler.forEach(action);
+    }
+
+    @Override
+    public Spliterator<StorageView<ItemVariant>> spliterator() {
+        return this.handler.spliterator();
     }
 }

@@ -5,15 +5,15 @@ import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
-public class ItemEnabledCondition implements ICondition {
+public class ItemEnabledCondition implements ConditionJsonProvider {
+    public static final ResourceLocation ID = new ResourceLocation(MODID, "item_enabled");
     public static Codec<ItemEnabledCondition> CODEC = RecordCodecBuilder.create(
             builder -> builder
                     .group(
@@ -35,13 +35,8 @@ public class ItemEnabledCondition implements ICondition {
     }
 
     @Override
-    public ResourceLocation getID() {
-        return new ResourceLocation(MODID, "item_enabled");
-    }
-
-    @Override
-    public boolean test(IContext context) {
-        return BuiltInRegistries.ITEM.get(getItem()).isEnabled(FeatureFlagSet.of());
+    public ResourceLocation getConditionId() {
+        return ID;
     }
 
     public ResourceLocation getItem() {
@@ -53,27 +48,17 @@ public class ItemEnabledCondition implements ICondition {
         return "item_enabled(\"" + item + "\")";
     }
 
-    public static class Serializer implements IConditionSerializer<ItemEnabledCondition> {
-        public static Serializer INSTANCE = new Serializer();
+    @Override
+    public void writeParameters(JsonObject json) {
+        json.add("type", new JsonPrimitive(getConditionId().toString()));
+        json.add("item", new JsonPrimitive(getItem().toString()));
+    }
 
-        @Override
-        public void write(JsonObject json, ItemEnabledCondition value) {
-            json.add("type", new JsonPrimitive(getID().toString()));
-            json.add("item", new JsonPrimitive(value.item.toString()));
-        }
-
-        @Override
-        public ItemEnabledCondition read(JsonObject json) {
-            var result = CODEC.decode(JsonOps.INSTANCE, json);
-            var completedResult = result.getOrThrow(false, (string) -> {
-                throw new RuntimeException("error reading ItemEnabledCondition: " + string);
-            });
-            return completedResult.getFirst();
-        }
-
-        @Override
-        public ResourceLocation getID() {
-            return new ResourceLocation(MODID, "item_enabled");
-        }
+    public static boolean test(JsonObject json) {
+        var result = CODEC.decode(JsonOps.INSTANCE, json);
+        var completedResult = result.getOrThrow(false, (string) -> {
+            throw new RuntimeException("error reading ItemEnabledCondition: " + string);
+        });
+        return BuiltInRegistries.ITEM.get(completedResult.getFirst().getItem()).isEnabled(FeatureFlagSet.of());
     }
 }

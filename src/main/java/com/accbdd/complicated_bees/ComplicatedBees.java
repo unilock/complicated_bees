@@ -1,7 +1,6 @@
 package com.accbdd.complicated_bees;
 
 import com.accbdd.complicated_bees.block.BeeNestBlock;
-import com.accbdd.complicated_bees.client.BeeModel;
 import com.accbdd.complicated_bees.client.ColorHandlers;
 import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.datagen.DataGenerators;
@@ -14,53 +13,40 @@ import com.accbdd.complicated_bees.genetics.gene.IGene;
 import com.accbdd.complicated_bees.genetics.mutation.Mutation;
 import com.accbdd.complicated_bees.genetics.mutation.condition.IMutationCondition;
 import com.accbdd.complicated_bees.item.CombItem;
-import com.accbdd.complicated_bees.particle.BeeParticle;
 import com.accbdd.complicated_bees.registry.*;
-import com.accbdd.complicated_bees.screen.AnalyzerScreen;
-import com.accbdd.complicated_bees.screen.ApiaryScreen;
-import com.accbdd.complicated_bees.screen.CentrifugeScreen;
-import com.accbdd.complicated_bees.screen.GeneratorScreen;
-import com.mojang.logging.LogUtils;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.*;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
-@Mod(ComplicatedBees.MODID)
-public class ComplicatedBees {
+public class ComplicatedBees implements ModInitializer {
     public static final String MODID = "complicated_bees";
-    public static final Logger LOGGER = LogUtils.getLogger();
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-    public static Supplier<IForgeRegistry<IGene<?>>> GENE_REGISTRY;
-    public static Supplier<IForgeRegistry<IBeeEffect>> BEE_EFFECT_REGISTRY;
-    public static Supplier<IForgeRegistry<IMutationCondition>> MUTATION_CONDITION_REGISTRY;
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    public static final Supplier<Registry<IGene<?>>> GENE_REGISTRY = () -> FabricRegistryBuilder.<IGene<?>>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "gene"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+    public static final Supplier<Registry<IBeeEffect>> BEE_EFFECT_REGISTRY = () -> FabricRegistryBuilder.<IBeeEffect>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "bee_effect"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+    public static final Supplier<Registry<IMutationCondition>> MUTATION_CONDITION_REGISTRY = () -> FabricRegistryBuilder.<IMutationCondition>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "mutation"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
 
-    public static final RegistryObject<CreativeModeTab> BEES_TAB = CREATIVE_MODE_TABS.register("complicated_bees", () -> CreativeModeTab.builder()
+    public static final CreativeModeTab BEES_TAB = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(MODID, "complicated_bees"), FabricItemGroup.builder()
             .title(Component.translatable("itemGroup.complicated_bees"))
             .icon(() -> ItemsRegistration.DRONE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
@@ -136,13 +122,12 @@ public class ComplicatedBees {
                 }
             }).build());
 
-    public ComplicatedBees(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
-        modEventBus.addListener(this::registerSerializers);
+    @Override
+    public void onInitialize() {
+        this.registerSerializers();
         modEventBus.addListener(ColorHandlers::registerItemColorHandlers);
         modEventBus.addListener(ColorHandlers::registerBlockColorHandlers);
-        modEventBus.addListener(this::registerRegistries);
-        modEventBus.addListener(this::registerDatapackRegistries);
+        this.registerDatapackRegistries();
 //        modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(DataGenerators::generate);
 
@@ -150,7 +135,7 @@ public class ComplicatedBees {
         ItemsRegistration.ITEMS.register(modEventBus);
         BlockEntitiesRegistration.BLOCK_ENTITIES.register(modEventBus);
         MenuRegistration.MENU_TYPES.register(modEventBus);
-        GeneRegistration.GENES.register(modEventBus);
+        GeneRegistration.register();
         BeeEffectRegistration.EFFECTS.register(modEventBus);
         MutationRegistration.MUTATION_CONDITIONS.register(modEventBus);
         EntitiesRegistration.ENTITY_TYPE.register(modEventBus);
@@ -161,84 +146,47 @@ public class ComplicatedBees {
         EsotericRegistration.RECIPE_SERIALIZER_REGISTER.register(modEventBus);
         EsotericRegistration.PARTICLE_TYPE.register(modEventBus);
 
-        MinecraftForge.EVENT_BUS.register(this);
-
         context.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 
         CREATIVE_MODE_TABS.register(modEventBus);
+
+        ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
     }
 
-    @SubscribeEvent
-    public void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(
+    public void registerDatapackRegistries() {
+        DynamicRegistries.registerSynced(
                 SpeciesRegistration.SPECIES_REGISTRY_KEY,
                 Species.SPECIES_CODEC,
                 Species.SPECIES_CODEC
         );
 
-        event.dataPackRegistry(
+        DynamicRegistries.registerSynced(
                 CombRegistration.COMB_REGISTRY_KEY,
                 Comb.CODEC,
                 Comb.CODEC
         );
 
-        event.dataPackRegistry(
+        DynamicRegistries.registerSynced(
                 MutationRegistration.MUTATION_REGISTRY_KEY,
                 Mutation.MUTATION_CODEC,
                 Mutation.MUTATION_CODEC
         );
 
-        event.dataPackRegistry(
+        DynamicRegistries.registerSynced(
                 FlowerRegistration.FLOWER_REGISTRY_KEY,
                 FlowerRegistration.CODEC,
                 FlowerRegistration.CODEC
         );
     }
 
-    @SubscribeEvent
-    public void registerRegistries(NewRegistryEvent event) {
-        GENE_REGISTRY = event.create(GeneRegistration.GENE_REGISTRY);
-        BEE_EFFECT_REGISTRY = event.create(BeeEffectRegistration.BEE_EFFECT_REGISTRY);
-        MUTATION_CONDITION_REGISTRY = event.create(MutationRegistration.MUTATION_CONDITION_REGISTRY);
+    public void registerSerializers() {
+        ResourceConditions.register(ItemEnabledCondition.ID, ItemEnabledCondition::test);
     }
 
-    @SubscribeEvent
-    public void registerSerializers(RegisterEvent event) {
-        event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS,
-                helper -> CraftingHelper.register(ItemEnabledCondition.Serializer.INSTANCE));
-    }
-
-    @SubscribeEvent
-    public void serverStarted(ServerStartedEvent event) {
-        LOGGER.info("Registered {} species", ServerLifecycleHooks.getCurrentServer().registryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().size());
-        LOGGER.info("Registered {} combs", ServerLifecycleHooks.getCurrentServer().registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().size());
-        LOGGER.info("Registered {} mutations", ServerLifecycleHooks.getCurrentServer().registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().size());
-        LOGGER.info("Registered {} flowers", ServerLifecycleHooks.getCurrentServer().registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
-    }
-
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            EntityRenderers.register(EntitiesRegistration.BEE_STAFF_MOUNT.get(), (context) -> new ThrownItemRenderer<>(context, 1.0f, true));
-
-            event.enqueueWork(() -> {
-                MenuScreens.register(MenuRegistration.CENTRIFUGE_MENU.get(), CentrifugeScreen::new);
-                MenuScreens.register(MenuRegistration.APIARY_MENU.get(), ApiaryScreen::new);
-                MenuScreens.register(MenuRegistration.GENERATOR_MENU.get(), GeneratorScreen::new);
-                MenuScreens.register(MenuRegistration.ANALYZER_MENU.get(), AnalyzerScreen::new);
-            });
-        }
-
-        @SubscribeEvent
-        public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
-            event.register(BeeModel.Loader.ID.getPath(), BeeModel.Loader.INSTANCE);
-        }
-
-        @SubscribeEvent
-        public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-            event.registerSpriteSet(EsotericRegistration.BEE_PARTICLE.get(),
-                    BeeParticle.Provider::new);
-        }
+    public void serverStarted(MinecraftServer server) {
+        LOGGER.info("Registered {} species", server.registryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().size());
+        LOGGER.info("Registered {} combs", server.registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().size());
+        LOGGER.info("Registered {} mutations", server.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().size());
+        LOGGER.info("Registered {} flowers", server.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
     }
 }

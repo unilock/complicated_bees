@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"com.accbdd.complicated_bees.ComplicatedBees"
+		],
+		"client": [
+			"com.accbdd.complicated_bees.ComplicatedBeesClient"
 		]
 	},
 	"mixins": [

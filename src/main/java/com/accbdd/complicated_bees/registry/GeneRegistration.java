@@ -1,31 +1,29 @@
 package com.accbdd.complicated_bees.registry;
 
 import com.accbdd.complicated_bees.genetics.gene.*;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryBuilder;
 
 import java.util.function.Supplier;
 
+import static com.accbdd.complicated_bees.ComplicatedBees.GENE_REGISTRY;
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
 public class GeneRegistration {
-    public static final ResourceLocation GENE_REGISTRY_KEY = new ResourceLocation(MODID, "gene");
-    public static final RegistryBuilder<IGene<?>> GENE_REGISTRY = RegistryBuilder.of(GENE_REGISTRY_KEY);
-
     //every registered gene should be registered as a 'default' value
-    public static final DeferredRegister<IGene<?>> GENES = DeferredRegister.create(GENE_REGISTRY_KEY, MODID);
-    public static final Supplier<GeneSpecies> SPECIES = GENES.register(GeneSpecies.TAG, GeneSpecies::new);
-    public static final Supplier<GeneLifespan> LIFESPAN = GENES.register(GeneLifespan.TAG, GeneLifespan::new);
-    public static final Supplier<GeneTemperature> TEMPERATURE = GENES.register(GeneTemperature.TAG, GeneTemperature::new);
-    public static final Supplier<GeneHumidity> HUMIDITY = GENES.register(GeneHumidity.TAG, GeneHumidity::new);
-    public static final Supplier<GeneFlower> FLOWER = GENES.register(GeneFlower.TAG, GeneFlower::new);
-    public static final Supplier<GeneFertility> FERTILITY = GENES.register(GeneFertility.TAG, GeneFertility::new);
-    public static final Supplier<GeneProductivity> PRODUCTIVITY = GENES.register(GeneProductivity.TAG, GeneProductivity::new);
-    public static final Supplier<GeneTerritory> TERRITORY = GENES.register(GeneTerritory.TAG, GeneTerritory::new);
-    public static final Supplier<GeneEffect> EFFECT = GENES.register(GeneEffect.TAG, GeneEffect::new);
-    public static final Supplier<GeneActiveTime> ACTIVE_TIME = GENES.register(GeneActiveTime.TAG, GeneActiveTime::new);
+    public static final Supplier<GeneSpecies> SPECIES = () -> Registry.register(GENE_REGISTRY.get(), GeneSpecies.ID, new GeneSpecies());
+    public static final Supplier<GeneLifespan> LIFESPAN = () -> Registry.register(GENE_REGISTRY.get(), GeneLifespan.ID, new GeneLifespan());
+    public static final Supplier<GeneTemperature> TEMPERATURE = () -> Registry.register(GENE_REGISTRY.get(), GeneTemperature.ID, new GeneTemperature());
+    public static final Supplier<GeneHumidity> HUMIDITY = () -> Registry.register(GENE_REGISTRY.get(), GeneHumidity.ID, new GeneHumidity());
+    public static final Supplier<GeneFlower> FLOWER = () -> Registry.register(GENE_REGISTRY.get(), GeneFlower.ID, new GeneFlower());
+    public static final Supplier<GeneFertility> FERTILITY = () -> Registry.register(GENE_REGISTRY.get(), GeneFertility.ID, new GeneFertility());
+    public static final Supplier<GeneProductivity> PRODUCTIVITY = () -> Registry.register(GENE_REGISTRY.get(), GeneProductivity.ID, new GeneProductivity());
+    public static final Supplier<GeneTerritory> TERRITORY = () -> Registry.register(GENE_REGISTRY.get(), GeneTerritory.ID, new GeneTerritory());
+    public static final Supplier<GeneEffect> EFFECT = () -> Registry.register(GENE_REGISTRY.get(), GeneEffect.ID, new GeneEffect());
+    public static final Supplier<GeneActiveTime> ACTIVE_TIME = () -> Registry.register(GENE_REGISTRY.get(), GeneActiveTime.ID, new GeneActiveTime());
 
-    public static final Supplier<GeneBoolean> CAVE_DWELLING = GENES.register("cave_dwelling", () -> new GeneBoolean(false, true));
-    public static final Supplier<GeneBoolean> WEATHERPROOF = GENES.register("weatherproof", () -> new GeneBoolean(false, true));
+    public static final Supplier<GeneBoolean> CAVE_DWELLING = () -> Registry.register(GENE_REGISTRY.get(), new ResourceLocation(MODID, "cave_dwelling"), new GeneBoolean(false, true));
+    public static final Supplier<GeneBoolean> WEATHERPROOF = () -> Registry.register(GENE_REGISTRY.get(), new ResourceLocation(MODID, "weatherproof"), new GeneBoolean(false, true));
+
+    public static void register() {}
 }

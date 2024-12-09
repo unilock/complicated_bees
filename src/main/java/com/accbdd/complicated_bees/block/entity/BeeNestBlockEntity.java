@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BeeNestBlockEntity extends BlockEntity {
+public class BeeNestBlockEntity extends BlockEntity implements CustomDataPacketHandlingBlockEntity {
     private Species species;
 
     public BeeNestBlockEntity(BlockPos pPos, BlockState pBlockState) {

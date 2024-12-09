@@ -14,9 +14,14 @@ import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.registry.FlowerRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.accbdd.complicated_bees.util.BlockPosBoxIterator;
+import com.accbdd.complicated_bees.util.TransferUtilExtras;
 import com.accbdd.complicated_bees.util.enums.EnumErrorCodes;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
@@ -28,25 +33,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Stack;
 
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
-@ParametersAreNonnullByDefault
+@SuppressWarnings("UnstableApiUsage")
 public class ApiaryBlockEntity extends BlockEntity {
     public static final int BEE_SLOT = 0;
     public static final int BEE_SLOT_COUNT = 2;
@@ -85,54 +81,54 @@ public class ApiaryBlockEntity extends BlockEntity {
     private final ItemStackHandler outputItems = createOutputHandler();
     private final ItemStackHandler frameItems = createFrameHandler();
 
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new CombinedInvWrapper(beeItems, outputItems, frameItems));
-    private final LazyOptional<IItemHandler> beeItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(beeItems) {
-        @Override
-        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
-        }
-    });
+    private final CombinedSlottedStorage<ItemVariant, ItemStackHandler> itemHandler = new CombinedSlottedStorage<>(List.of(beeItems, outputItems, frameItems));
+//    private final LazyOptional<IItemHandler> beeItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(beeItems) {
+//        @Override
+//        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+//            return ItemStack.EMPTY;
+//        }
+//    });
+//
+//    private final LazyOptional<IItemHandler> outputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(outputItems) {
+//        @Override
+//        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//            return stack;
+//        }
+//
+//        @Override
+//        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//            return false;
+//        }
+//    });
+//    private final LazyOptional<IItemHandler> frameItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(frameItems) {
+//        @Override
+//        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//            return stack.getItem() instanceof FrameItem;
+//        }
+//    });
 
-    private final LazyOptional<IItemHandler> outputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(outputItems) {
-        @Override
-        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return stack;
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return false;
-        }
-    });
-    private final LazyOptional<IItemHandler> frameItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(frameItems) {
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return stack.getItem() instanceof FrameItem;
-        }
-    });
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        itemHandler.invalidate();
-        beeItemHandler.invalidate();
-        outputItemHandler.invalidate();
-        frameItemHandler.invalidate();
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap== ForgeCapabilities.ITEM_HANDLER) {
-            if (side == null) {
-                return this.getItemHandler().cast();
-            }
-            if (side == Direction.DOWN) {
-                return this.getOutputItemHandler().cast();
-            }
-            return this.getBeeItemHandler().cast();
-        }
-        return super.getCapability(cap, side);
-    }
+//    @Override
+//    public void invalidateCaps() {
+//        super.invalidateCaps();
+//        itemHandler.invalidate();
+//        beeItemHandler.invalidate();
+//        outputItemHandler.invalidate();
+//        frameItemHandler.invalidate();
+//    }
+//
+//    @Override
+//    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+//        if (cap== ForgeCapabilities.ITEM_HANDLER) {
+//            if (side == null) {
+//                return this.getItemHandler().cast();
+//            }
+//            if (side == Direction.DOWN) {
+//                return this.getOutputItemHandler().cast();
+//            }
+//            return this.getBeeItemHandler().cast();
+//        }
+//        return super.getCapability(cap, side);
+//    }
 
     public ApiaryBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntitiesRegistration.APIARY_ENTITY.get(), pPos, pBlockState);
@@ -175,21 +171,21 @@ public class ApiaryBlockEntity extends BlockEntity {
         return frameItems;
     }
 
-    public LazyOptional<IItemHandler> getItemHandler() {
-        return itemHandler;
+    public Optional<CombinedSlottedStorage<ItemVariant, ItemStackHandler>> getItemHandler() {
+        return Optional.of(itemHandler);
     }
 
-    public LazyOptional<IItemHandler> getBeeItemHandler() {
-        return beeItemHandler;
-    }
-
-    public LazyOptional<IItemHandler> getOutputItemHandler() {
-        return outputItemHandler;
-    }
-
-    public LazyOptional<IItemHandler> getFrameItemHandler() {
-        return frameItemHandler;
-    }
+//    public LazyOptional<IItemHandler> getBeeItemHandler() {
+//        return beeItemHandler;
+//    }
+//
+//    public LazyOptional<IItemHandler> getOutputItemHandler() {
+//        return outputItemHandler;
+//    }
+//
+//    public LazyOptional<IItemHandler> getFrameItemHandler() {
+//        return frameItemHandler;
+//    }
 
     public ContainerData getData() {
         return this.data;
@@ -222,19 +218,19 @@ public class ApiaryBlockEntity extends BlockEntity {
     private ItemStackHandler createBeeHandler() {
         return new ItemStackHandler(ApiaryBlockEntity.BEE_SLOT_COUNT) {
             @Override
-            public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                boolean itemValid = isItemValid(slot, stack);
-                return itemValid ? super.insertItem(slot, stack, simulate) : stack;
+            public long insertSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+                boolean itemValid = isItemValid(slot, resource, 1);
+                return itemValid ? super.insertSlot(slot, resource, maxAmount, transaction) : 0;
             }
 
             @Override
-            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-                if (stack.getItem() instanceof BeeItem) {
+            public boolean isItemValid(int slot, ItemVariant resource, int count) {
+                if (resource.getItem() instanceof BeeItem) {
                     switch (slot) {
                         case 0:
-                            return (stack.getItem() instanceof QueenItem || stack.getItem() instanceof PrincessItem);
+                            return (resource.getItem() instanceof QueenItem || resource.getItem() instanceof PrincessItem);
                         case 1:
-                            return (stack.getItem() instanceof DroneItem);
+                            return (resource.getItem() instanceof DroneItem);
                     }
                 }
                 return false;
@@ -301,7 +297,7 @@ public class ApiaryBlockEntity extends BlockEntity {
             increaseBreedingProgress();
             if (hasFinished()) {
                 resetBreedingProgress();
-                beeItems.extractItem(1, 1, false);
+                TransferUtilExtras.extractAnySlot(beeItems, 1, 1);
                 beeItems.setStackInSlot(0, createQueenFromPrincessAndDrone(top_stack, bottom_stack));
                 rebuildFlowerCache(beeItems.getStackInSlot(0));
                 checkQueenSatisfied();
@@ -349,8 +345,8 @@ public class ApiaryBlockEntity extends BlockEntity {
     private void tryEmptyBuffer() {
         while (!outputBuffer.empty()) {
             ItemStack next = outputBuffer.pop();
-            next = ItemHandlerHelper.insertItem(outputItems, next, false);
-            if (next == ItemStack.EMPTY) {
+            long inserted = TransferUtil.insertItem(outputItems, next);
+            if (inserted > 0L) {
                 setChanged();
                 removeError(EnumErrorCodes.OUTPUT_FULL);
             } else {
@@ -470,14 +466,14 @@ public class ApiaryBlockEntity extends BlockEntity {
             for (int i = 0; i < (int) GeneticHelper.getGeneValue(queen, GeneFertility.ID, true); i++) {
                 outputBuffer.add(GeneticHelper.getOffspring(queen, ItemsRegistration.DRONE.get(), getLevel(), getBlockPos(), mutationMod));
             }
-            beeItems.extractItem(BEE_SLOT, 1, false);
+            TransferUtilExtras.extractAnySlot(beeItems, BEE_SLOT, 1);
             setChanged();
         }
     }
 
     public List<BeeHousingModifier> getFrameModifiers() {
         List<BeeHousingModifier> modifiers = new ArrayList<>();
-        for (int i = 0; i < frameItems.getSlots(); i++) {
+        for (int i = 0; i < frameItems.getSlots().size(); i++) {
             ItemStack item = frameItems.getStackInSlot(i);
             if (item.getItem() instanceof FrameItem frame)
                 modifiers.add(frame.getModifier());
@@ -486,7 +482,7 @@ public class ApiaryBlockEntity extends BlockEntity {
     }
 
     public void damageFrames() {
-        for (int i = 0; i < frameItems.getSlots(); i++) {
+        for (int i = 0; i < frameItems.getSlots().size(); i++) {
             if (frameItems.getStackInSlot(i).hurt(1, getLevel().random, null))
                 frameItems.setStackInSlot(i, ItemStack.EMPTY);
         }

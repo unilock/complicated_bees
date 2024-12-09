@@ -2,6 +2,8 @@ package com.accbdd.complicated_bees.block.entity;
 
 import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
+import com.accbdd.complicated_bees.util.TransferUtilExtras;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -12,13 +14,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -36,55 +34,55 @@ public class GeneratorBlockEntity extends BlockEntity {
     public static final int SLOT = 0;
 
     private final ItemStackHandler items = createItemHandler();
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new AdaptedItemHandler(items) {
-        @Override
-        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
-        }
-    });
+//    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new AdaptedItemHandler(items) {
+//        @Override
+//        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+//            return ItemStack.EMPTY;
+//        }
+//    });
 
     private final EnergyStorage energy = createEnergyStorage();
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new AdaptedEnergyStorage(energy) {
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            return 0;
-        }
-
-        @Override
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            return 0;
-        }
-
-        @Override
-        public boolean canExtract() {
-            return false;
-        }
-
-        @Override
-        public boolean canReceive() {
-            return false;
-        }
-    });
+//    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new AdaptedEnergyStorage(energy) {
+//        @Override
+//        public int receiveEnergy(int maxReceive, boolean simulate) {
+//            return 0;
+//        }
+//
+//        @Override
+//        public int extractEnergy(int maxExtract, boolean simulate) {
+//            return 0;
+//        }
+//
+//        @Override
+//        public boolean canExtract() {
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean canReceive() {
+//            return false;
+//        }
+//    });
 
     private int burnTime;
     private int maxBurnTime;
 
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        itemHandler.invalidate();
-        energyHandler.invalidate();
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER)
-            return getItemHandler().cast();
-        if (cap == ForgeCapabilities.ENERGY)
-            return getEnergyHandler().cast();
-
-        return super.getCapability(cap, side);
-    }
+//    @Override
+//    public void invalidateCaps() {
+//        super.invalidateCaps();
+//        itemHandler.invalidate();
+//        energyHandler.invalidate();
+//    }
+//
+//    @Override
+//    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
+//        if (cap == ForgeCapabilities.ITEM_HANDLER)
+//            return getItemHandler().cast();
+//        if (cap == ForgeCapabilities.ENERGY)
+//            return getEnergyHandler().cast();
+//
+//        return super.getCapability(cap, side);
+//    }
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntitiesRegistration.GENERATOR_BLOCK_ENTITY.get(), pos, state);
@@ -108,7 +106,7 @@ public class GeneratorBlockEntity extends BlockEntity {
                 if (burnTime <= 0) {
                     return;
                 }
-                items.extractItem(SLOT, 1, false);
+                TransferUtilExtras.extractAnySlot(items, SLOT, 1);
             } else {
                 setBurnTime(burnTime - 1);
                 energy.receiveEnergy(GENERATE, false);
@@ -183,7 +181,7 @@ public class GeneratorBlockEntity extends BlockEntity {
         }
     }
 
-    @Nonnull
+    @NotNull
     private ItemStackHandler createItemHandler() {
         return new ItemStackHandler(SLOT_COUNT) {
             @Override
@@ -198,13 +196,13 @@ public class GeneratorBlockEntity extends BlockEntity {
         return new EnergyStorage(CAPACITY, MAXTRANSFER, MAXTRANSFER);
     }
 
-    public LazyOptional<IItemHandler> getItemHandler() {
-        return itemHandler;
-    }
+//    public LazyOptional<IItemHandler> getItemHandler() {
+//        return itemHandler;
+//    }
 
-    public LazyOptional<IEnergyStorage> getEnergyHandler() {
-        return energyHandler;
-    }
+//    public LazyOptional<IEnergyStorage> getEnergyHandler() {
+//        return energyHandler;
+//    }
 
     public int getMaxBurnTime() {
         return maxBurnTime;

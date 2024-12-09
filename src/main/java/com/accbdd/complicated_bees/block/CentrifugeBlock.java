@@ -2,6 +2,10 @@ package com.accbdd.complicated_bees.block;
 
 import com.accbdd.complicated_bees.block.entity.CentrifugeBlockEntity;
 import com.accbdd.complicated_bees.screen.CentrifugeMenu;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,11 +29,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class CentrifugeBlock extends BaseEntityBlock {
     public static final String SCREEN_CENTRIFUGE = "gui.complicated_bees.centrifuge";
 
@@ -111,9 +115,10 @@ public class CentrifugeBlock extends BaseEntityBlock {
             while (!centrifuge.outputBuffer.empty()) {
                 Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), centrifuge.outputBuffer.pop());
             }
-            IItemHandler handler = centrifuge.getItemHandler().orElseThrow(() -> new RuntimeException("item handler not found!"));
-            for (int i = 0; i < handler.getSlots(); i++) {
-                Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), handler.getStackInSlot(i));
+            CombinedSlottedStorage<ItemVariant, ItemStackHandler> handler = centrifuge.getItemHandler().orElseThrow(() -> new RuntimeException("item handler not found!"));
+            for (int i = 0; i < handler.getSlots().size(); i++) {
+                SingleSlotStorage<ItemVariant> slot = handler.getSlot(i);
+                Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), slot.getResource().toStack((int) slot.getAmount()));
             }
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);

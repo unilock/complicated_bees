@@ -5,8 +5,13 @@ import com.accbdd.complicated_bees.genetics.Product;
 import com.accbdd.complicated_bees.recipe.CentrifugeRecipe;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.registry.EsotericRegistration;
+import com.accbdd.complicated_bees.util.TransferUtilExtras;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -17,23 +22,15 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
+@SuppressWarnings("UnstableApiUsage")
 public class CentrifugeBlockEntity extends BlockEntity {
     public static final int INPUT_SLOT = 0;
     public static final int INPUT_SLOT_COUNT = 1;
@@ -60,47 +57,47 @@ public class CentrifugeBlockEntity extends BlockEntity {
 
     private final ItemStackHandler inputItems = createItemHandler(INPUT_SLOT_COUNT);
     private final ItemStackHandler outputItems = createItemHandler(OUTPUT_SLOT_COUNT);
-    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new CombinedInvWrapper(inputItems, outputItems));
-    private final LazyOptional<IItemHandler> inputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(inputItems) {
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
-        }
-    });
-    private final LazyOptional<IItemHandler> outputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(outputItems) {
-        @Override
-        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return stack;
-        }
+    private final CombinedSlottedStorage<ItemVariant, ItemStackHandler> itemHandler = new CombinedSlottedStorage<>(List.of(inputItems, outputItems));
+//    private final LazyOptional<IItemHandler> inputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(inputItems) {
+//        @Override
+//        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+//            return ItemStack.EMPTY;
+//        }
+//    });
+//    private final LazyOptional<IItemHandler> outputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(outputItems) {
+//        @Override
+//        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//            return stack;
+//        }
+//
+//        @Override
+//        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//            return false;
+//        }
+//    });
 
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return false;
-        }
-    });
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        itemHandler.invalidate();
-        inputItemHandler.invalidate();
-        outputItemHandler.invalidate();
-        energyHandler.invalidate();
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == null)
-                return this.getItemHandler().cast();
-            if (side == Direction.DOWN)
-                return this.getOutputItemHandler().cast();
-            return this.getInputItemHandler().cast();
-        }
-        if (cap == ForgeCapabilities.ENERGY)
-            return this.getEnergyHandler().cast();
-        return super.getCapability(cap, side);
-    }
+//    @Override
+//    public void invalidateCaps() {
+//        super.invalidateCaps();
+//        itemHandler.invalidate();
+//        inputItemHandler.invalidate();
+//        outputItemHandler.invalidate();
+//        energyHandler.invalidate();
+//    }
+//
+//    @Override
+//    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+//        if (cap == ForgeCapabilities.ITEM_HANDLER) {
+//            if (side == null)
+//                return this.getItemHandler().cast();
+//            if (side == Direction.DOWN)
+//                return this.getOutputItemHandler().cast();
+//            return this.getInputItemHandler().cast();
+//        }
+//        if (cap == ForgeCapabilities.ENERGY)
+//            return this.getEnergyHandler().cast();
+//        return super.getCapability(cap, side);
+//    }
 
     public CentrifugeBlockEntity(BlockPos pos, BlockState blockState) {
         super(BlockEntitiesRegistration.CENTRIFUGE_ENTITY.get(), pos, blockState);
@@ -138,17 +135,17 @@ public class CentrifugeBlockEntity extends BlockEntity {
         return outputItems;
     }
 
-    public LazyOptional<IItemHandler> getItemHandler() {
-        return itemHandler;
+    public Optional<CombinedSlottedStorage<ItemVariant, ItemStackHandler>> getItemHandler() {
+        return Optional.of(itemHandler);
     }
 
-    public LazyOptional<IItemHandler> getInputItemHandler() {
-        return inputItemHandler;
-    }
-
-    public LazyOptional<IItemHandler> getOutputItemHandler() {
-        return outputItemHandler;
-    }
+//    public LazyOptional<IItemHandler> getInputItemHandler() {
+//        return inputItemHandler;
+//    }
+//
+//    public LazyOptional<IItemHandler> getOutputItemHandler() {
+//        return outputItemHandler;
+//    }
 
     private final EnergyStorage energy = createEnergyStorage();
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new AdaptedEnergyStorage(energy) {
@@ -187,9 +184,9 @@ public class CentrifugeBlockEntity extends BlockEntity {
         return new EnergyStorage(CAPACITY, MAXTRANSFER, MAXTRANSFER);
     }
 
-    public LazyOptional<IEnergyStorage> getEnergyHandler() {
-        return energyHandler;
-    }
+//    public LazyOptional<IEnergyStorage> getEnergyHandler() {
+//        return energyHandler;
+//    }
 
     public int getStoredPower() {
         return energy.getEnergyStored();
@@ -261,8 +258,8 @@ public class CentrifugeBlockEntity extends BlockEntity {
     private void tryEmptyBuffer() {
         while (!outputBuffer.empty()) {
             ItemStack next = outputBuffer.pop();
-            next = ItemHandlerHelper.insertItem(outputItems, next, false);
-            if (next == ItemStack.EMPTY) {
+            long inserted = TransferUtil.insertItem(outputItems, next);
+            if (inserted > 0L) {
                 setChanged();
             } else {
                 outputBuffer.push(next);
@@ -299,7 +296,7 @@ public class CentrifugeBlockEntity extends BlockEntity {
 
     private void craftItem(ItemStack stack) {
         List<Product> products = quickCheck.getRecipeFor(getWrapper(), getLevel()).get().getOutputs();
-        this.inputItems.extractItem(INPUT_SLOT, 1, false);
+        TransferUtilExtras.extractAnySlot(inputItems, INPUT_SLOT, 1);
 
         for (Product product : products) {
             outputBuffer.push(product.getStackResult());
@@ -310,8 +307,8 @@ public class CentrifugeBlockEntity extends BlockEntity {
         boolean canInsert = false;
         int stackCount = stack.getCount();
         for (int i = 0; i < OUTPUT_SLOT_COUNT; i++) {
-            stack = this.outputItems.insertItem(i, stack, true);
-            canInsert = canInsert || (stack.getCount() < stackCount);
+            long inserted = TransferUtilExtras.simulateInsertSlot(outputItems, i, stack);
+            canInsert = canInsert || (inserted < stackCount);
         }
         return canInsert;
     }

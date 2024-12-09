@@ -23,6 +23,13 @@ repositories {
 		name = "DevOS"
 		url = "https://mvn.devos.one/releases/"
 	}
+	maven {
+		name = "JamiesWhiteShirt" // Required for a Porting Lib dependency
+		url = "https://maven.jamieswhiteshirt.com/libs-release/"
+		content {
+			includeGroup "com.jamieswhiteshirt"
+		}
+	}
     maven {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
@@ -71,6 +78,7 @@ dependencies {
 		exclude group: "net.fabricmc.fabric-api"
 	}
 	modImplementation include("io.github.fabricators_of_create.Porting-Lib:models:${portinglib_version}")
+	modImplementation include("io.github.fabricators_of_create.Porting-Lib:transfer:${portinglib_version}")
 
 	modImplementation "curse.maven:jade-324717:${jade_id}"
 

@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "type": "complicated_bees:item_enabled",
+      "condition": "complicated_bees:item_enabled",
+      "item": "complicated_bees:honey_porkchop"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:cooked_porkchop"
+    },
+    {
+      "item": "complicated_bees:honey_droplet"
+    },
+    {
+      "item": "complicated_bees:honey_droplet"
+    },
+    {
+      "item": "complicated_bees:honey_droplet"
+    },
+    {
+      "item": "complicated_bees:honey_droplet"
+    }
+  ],
+  "result": {
+    "item": "complicated_bees:honey_porkchop"
+  }
+}

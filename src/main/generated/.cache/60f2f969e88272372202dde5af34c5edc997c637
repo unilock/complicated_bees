@@ -1,0 +1,7 @@
+// 1.20.1	2024-12-09T16:53:03.36661	Complicated Bees/Tags for minecraft:block
+0041f9898ed8663b929c068c6dc4d487d1e3bee6 data/minecraft/tags/blocks/mineable/pickaxe.json
+fcd07b55929503d7182025679e785de8c5062500 data/minecraft/tags/blocks/mineable/axe.json
+5493ccd2ae978ab149b1e494b6895c9358eadc15 data/minecraft/tags/blocks/fences.json
+16e6890e6c51d423ec71fa182687f25ac4ae4232 data/minecraft/tags/blocks/fence_gates.json
+46ebadc96adf07ae8a49b45643736654c050fa02 data/complicated_bees/tags/blocks/mineable/scoop_tool.json
+5e93966e5d501f1302e162546aff6936a6687dbe data/minecraft/tags/blocks/walls.json

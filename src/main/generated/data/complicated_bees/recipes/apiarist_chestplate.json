@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": {
+      "item": "complicated_bees:woven_mesh"
+    }
+  },
+  "pattern": [
+    "M M",
+    "MMM",
+    "MMM"
+  ],
+  "result": {
+    "item": "complicated_bees:apiarist_chestplate"
+  },
+  "show_notification": true
+}

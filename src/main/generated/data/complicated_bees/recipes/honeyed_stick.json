@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "H": {
+      "item": "complicated_bees:honey_droplet"
+    }
+  },
+  "pattern": [
+    "###",
+    "#H#",
+    "###"
+  ],
+  "result": {
+    "item": "complicated_bees:honeyed_stick"
+  },
+  "show_notification": true
+}

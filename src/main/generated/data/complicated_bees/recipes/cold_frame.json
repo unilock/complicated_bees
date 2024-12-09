@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "type": "complicated_bees:item_enabled",
+      "condition": "complicated_bees:item_enabled",
+      "item": "complicated_bees:cold_frame"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "item": "complicated_bees:waxed_stick"
+    },
+    "X": {
+      "item": "minecraft:blue_ice"
+    }
+  },
+  "pattern": [
+    "OOO",
+    "OXO",
+    "OOO"
+  ],
+  "result": {
+    "item": "complicated_bees:cold_frame"
+  },
+  "show_notification": true
+}

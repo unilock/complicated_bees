@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_honey_droplet": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "complicated_bees:honey_droplet"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "complicated_bees:honeyed_stick"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_honey_droplet",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "complicated_bees:honeyed_stick"
+    ]
+  },
+  "sends_telemetry_event": false
+}

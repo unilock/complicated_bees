@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:wax_brick_slab_from_wax_bricks_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wax_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "complicated_bees:wax_bricks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wax_bricks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:wax_brick_slab_from_wax_bricks_stonecutting"
+    ]
+  },
+  "sends_telemetry_event": false
+}

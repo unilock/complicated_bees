@@ -133,6 +133,8 @@ public class ComplicatedBees implements ModInitializer {
                 }
             }).build());
 
+    public static MinecraftServer currentServer;
+
     @Override
     public void onInitialize() {
         this.registerSerializers();
@@ -152,6 +154,7 @@ public class ComplicatedBees implements ModInitializer {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
+        ServerLifecycleEvents.SERVER_STOPPING.register(this::serverStopping);
     }
 
     public void registerDatapackRegistries() {
@@ -189,5 +192,10 @@ public class ComplicatedBees implements ModInitializer {
         LOGGER.info("Registered {} combs", server.registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} mutations", server.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} flowers", server.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
+        currentServer = server;
+    }
+
+    public void serverStopping(MinecraftServer server) {
+        currentServer = null;
     }
 }

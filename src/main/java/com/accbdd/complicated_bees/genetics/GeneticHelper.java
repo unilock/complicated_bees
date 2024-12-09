@@ -1,5 +1,6 @@
 package com.accbdd.complicated_bees.genetics;
 
+import com.accbdd.complicated_bees.ComplicatedBees;
 import com.accbdd.complicated_bees.genetics.gene.GeneSpecies;
 import com.accbdd.complicated_bees.genetics.gene.GeneTolerant;
 import com.accbdd.complicated_bees.genetics.gene.IGene;
@@ -21,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Map;
 import java.util.Random;
@@ -69,14 +69,14 @@ public class GeneticHelper {
     }
 
     public static RegistryAccess getRegistryAccess() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
+        if (ComplicatedBees.currentServer == null) {
             if (Minecraft.getInstance().getConnection() == null) {
                 return null;
             } else {
                 return Minecraft.getInstance().getConnection().registryAccess();
             }
         } else {
-            return ServerLifecycleHooks.getCurrentServer().registryAccess();
+            return ComplicatedBees.currentServer.registryAccess();
         }
     }
 
@@ -155,7 +155,7 @@ public class GeneticHelper {
             } else if (geneEntry.getValue() instanceof GeneSpecies) {
                 Species speciesA = (Species) geneA.get();
                 Species speciesB = (Species) geneB.get();
-                for (Mutation mutation : ServerLifecycleHooks.getCurrentServer().registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList()) {
+                for (Mutation mutation : ComplicatedBees.currentServer.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList()) {
                     if ((mutation.getFirstSpecies() == speciesA && mutation.getSecondSpecies() == speciesB) || (mutation.getSecondSpecies() == speciesA && mutation.getFirstSpecies() == speciesB)) {
                         boolean canMutate = true;
                         for (IMutationCondition condition : mutation.getConditions())

@@ -1,5 +1,6 @@
 package com.accbdd.complicated_bees.block.entity;
 
+import com.accbdd.complicated_bees.ComplicatedBees;
 import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.genetics.*;
 import com.accbdd.complicated_bees.genetics.effect.IBeeEffect;
@@ -34,7 +35,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -525,7 +525,7 @@ public class ApiaryBlockEntity extends BlockEntity {
     }
 
     private void checkFlowerCache(ItemStack bee) {
-        Flower flower = ServerLifecycleHooks.getCurrentServer().registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
+        Flower flower = ComplicatedBees.currentServer.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
                 .get(((GeneFlower) GeneticHelper.getGene(bee, GeneFlower.ID, true)).get());
         Level level = getLevel();
         if (flower == null || level == null) {
@@ -547,7 +547,7 @@ public class ApiaryBlockEntity extends BlockEntity {
 
     private void rebuildFlowerCache(ItemStack bee) {
         clearFlowerCache();
-        Flower flower = ServerLifecycleHooks.getCurrentServer().registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
+        Flower flower = ComplicatedBees.currentServer.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
                 .get(((GeneFlower) GeneticHelper.getGene(bee, GeneFlower.ID, true)).get());
 
         if (flower == null) {

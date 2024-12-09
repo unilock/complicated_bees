@@ -1,5 +1,6 @@
 package com.accbdd.complicated_bees.genetics.effect;
 
+import com.accbdd.complicated_bees.ComplicatedBees;
 import com.accbdd.complicated_bees.util.BlockPosBoxIterator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -10,7 +11,6 @@ import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class PollenicEffect extends BeeEffect {
         if (cycleProgress == 0) {
             BlockPosBoxIterator iterator = getBlockIterator(apiary, queen);
             List<BlockPos> positions = new ArrayList<>();
-            ServerLevel level = ServerLifecycleHooks.getCurrentServer().getLevel(apiary.getLevel().dimension());
+            ServerLevel level = ComplicatedBees.currentServer.getLevel(apiary.getLevel().dimension());
             if (level != null) {
                 while (iterator.hasNext()) {
                     BlockPos checkPos = iterator.next();

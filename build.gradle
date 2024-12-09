@@ -23,13 +23,6 @@ repositories {
 		name = "DevOS"
 		url = "https://mvn.devos.one/releases/"
 	}
-	maven {
-		name = "JamiesWhiteShirt" // Required for a Porting Lib dependency
-		url = "https://maven.jamieswhiteshirt.com/libs-release/"
-		content {
-			includeGroup "com.jamieswhiteshirt"
-		}
-	}
     maven {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"

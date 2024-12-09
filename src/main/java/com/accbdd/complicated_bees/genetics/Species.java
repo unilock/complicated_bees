@@ -114,9 +114,9 @@ public class Species {
 
     public List<ItemStack> toMembers() {
         List<ItemStack> members = new ArrayList<>();
-        members.add(this.toStack(ItemsRegistration.QUEEN.get()));
-        members.add(this.toStack(ItemsRegistration.PRINCESS.get()));
-        members.add(this.toStack(ItemsRegistration.DRONE.get()));
+        members.add(this.toStack(ItemsRegistration.QUEEN));
+        members.add(this.toStack(ItemsRegistration.PRINCESS));
+        members.add(this.toStack(ItemsRegistration.DRONE));
         return members;
     }
 }

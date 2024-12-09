@@ -1,8 +1,11 @@
 {
-  "forge:conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "biomesoplenty"
+      "type": "fabric:all_mods_loaded",
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomesoplenty"
+      ]
     }
   ],
   "feature": "complicated_bees:biomesoplenty/mahogany_tree",

@@ -1,8 +1,11 @@
 {
-  "forge:conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "terralith"
+      "type": "fabric:all_mods_loaded",
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "terralith"
+      ]
     }
   ],
   "feature": "complicated_bees:terralith/moonlight_tree",

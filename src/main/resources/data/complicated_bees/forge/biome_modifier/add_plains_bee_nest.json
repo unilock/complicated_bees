@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": ["minecraft:plains", "minecraft:meadow"],
-  "features": "complicated_bees:plains_bee_nest",
-  "step": "vegetal_decoration"
-}

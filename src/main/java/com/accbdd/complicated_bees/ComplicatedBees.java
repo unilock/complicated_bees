@@ -12,6 +12,7 @@ import com.accbdd.complicated_bees.genetics.mutation.Mutation;
 import com.accbdd.complicated_bees.genetics.mutation.condition.IMutationCondition;
 import com.accbdd.complicated_bees.item.CombItem;
 import com.accbdd.complicated_bees.registry.BeeEffectRegistration;
+import com.accbdd.complicated_bees.registry.BiomeModificationRegistration;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
 import com.accbdd.complicated_bees.registry.CombRegistration;
@@ -152,6 +153,7 @@ public class ComplicatedBees implements ModInitializer {
         MutationRegistration.register();
         EntitiesRegistration.register();
         EsotericRegistration.register();
+        BiomeModificationRegistration.register();
 
         ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 

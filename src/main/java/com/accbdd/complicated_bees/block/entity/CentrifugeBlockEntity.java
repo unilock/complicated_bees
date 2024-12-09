@@ -289,12 +289,14 @@ public class CentrifugeBlockEntity extends BlockEntity implements ExtendedScreen
     private void tryEmptyBuffer() {
         while (!outputBuffer.empty()) {
             ItemStack next = outputBuffer.pop();
-            long inserted = TransferUtil.insertItem(outputItems, next);
-            if (inserted > 0L) {
-                setChanged();
-            } else {
-                outputBuffer.push(next);
-                break;
+            if (!next.isEmpty()) {
+                long inserted = TransferUtil.insertItem(outputItems, next);
+                if (inserted > 0L) {
+                    setChanged();
+                } else {
+                    outputBuffer.push(next);
+                    break;
+                }
             }
         }
     }

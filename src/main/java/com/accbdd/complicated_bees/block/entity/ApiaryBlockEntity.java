@@ -373,14 +373,16 @@ public class ApiaryBlockEntity extends BlockEntity implements ExtendedScreenHand
     private void tryEmptyBuffer() {
         while (!outputBuffer.empty()) {
             ItemStack next = outputBuffer.pop();
-            long inserted = TransferUtil.insertItem(outputItems, next);
-            if (inserted > 0L) {
-                setChanged();
-                removeError(EnumErrorCodes.OUTPUT_FULL);
-            } else {
-                outputBuffer.push(next);
-                addError(EnumErrorCodes.OUTPUT_FULL);
-                break;
+            if (!next.isEmpty()) {
+                long inserted = TransferUtil.insertItem(outputItems, next);
+                if (inserted > 0L) {
+                    setChanged();
+                    removeError(EnumErrorCodes.OUTPUT_FULL);
+                } else {
+                    outputBuffer.push(next);
+                    addError(EnumErrorCodes.OUTPUT_FULL);
+                    break;
+                }
             }
         }
     }

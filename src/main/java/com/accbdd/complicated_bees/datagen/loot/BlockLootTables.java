@@ -4,8 +4,8 @@ import com.accbdd.complicated_bees.loot.InheritHiveCombFunction;
 import com.accbdd.complicated_bees.loot.InheritHiveSpeciesFunction;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
-import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.world.flag.FeatureFlags;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -18,17 +18,14 @@ import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Collections;
-
-public class BlockLootTables extends BlockLootSubProvider {
-    public BlockLootTables() {
-        super(Collections.emptySet(), FeatureFlags.REGISTRY.allFlags());
+public class BlockLootTables extends FabricBlockLootTableProvider {
+    public BlockLootTables(FabricDataOutput dataOutput) {
+        super(dataOutput);
     }
 
     @Override
-    protected void generate() {
+    public void generate() {
         dropSelf(BlocksRegistration.APIARY.get());
         dropSelf(BlocksRegistration.CENTRIFUGE.get());
         dropSelf(BlocksRegistration.GENERATOR.get());
@@ -57,13 +54,13 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(BlocksRegistration.HONEYED_TRAPDOOR.get());
     }
 
-    @Override
-    protected Iterable<Block> getKnownBlocks() {
-        return BlocksRegistration.BLOCKS.getEntries()
-                .stream()
-                .map(RegistryObject::get)
-                .toList();
-    }
+//    @Override
+//    protected Iterable<Block> getKnownBlocks() {
+//        return BlocksRegistration.BLOCKS.getEntries()
+//                .stream()
+//                .map(RegistryObject::get)
+//                .toList();
+//    }
 
     public LootTable.Builder nestLootTable(Block beenest) {
         return LootTable.lootTable()

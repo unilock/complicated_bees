@@ -44,6 +44,10 @@ repositories {
 	}
 }
 
+fabricApi {
+	configureDataGeneration()
+}
+
 loom {
 	accessWidenerPath = file("src/main/resources/complicated_bees.accesswidener")
 
@@ -101,11 +105,11 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-//jar {
-//	from("LICENSE") {
-//		rename { "${it}_${base.archivesName.get()}" }
-//	}
-//}
+jar {
+	from('src/generated') {
+		include 'assets'
+	}
+}
 
 // Configure the maven publication
 publishing {

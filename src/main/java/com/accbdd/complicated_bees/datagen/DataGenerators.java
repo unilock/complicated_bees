@@ -1,17 +1,12 @@
 package com.accbdd.complicated_bees.datagen;
 
+import com.accbdd.complicated_bees.datagen.loot.BlockLootTables;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
-import net.minecraft.core.HolderLookup;
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.data.BlockFamily;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
 
-import java.util.concurrent.CompletableFuture;
-
-public class DataGenerators {
+public class DataGenerators implements DataGeneratorEntrypoint {
     public static final BlockFamily HONEYED_PLANK_FAMILY = new BlockFamily.Builder(BlocksRegistration.HONEYED_PLANKS.get())
             .stairs(BlocksRegistration.HONEYED_STAIRS.get())
             .slab(BlocksRegistration.HONEYED_SLAB.get())
@@ -42,21 +37,31 @@ public class DataGenerators {
             .chiseled(BlocksRegistration.CHISELED_WAX.get())
             .getFamily();
 
-    public static void generate(GatherDataEvent event) {
-        DataGenerator generator = event.getGenerator();
-        PackOutput packOutput = generator.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+//    public static void generate(GatherDataEvent event) {
+//        DataGenerator generator = event.getGenerator();
+//        PackOutput packOutput = generator.getPackOutput();
+//        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+//        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+//
+//        generator.addProvider(event.includeClient(), new BlockStateGenerator(packOutput, existingFileHelper));
+//        generator.addProvider(event.includeClient(), new ItemModelGenerator(packOutput, existingFileHelper));
+//        generator.addProvider(event.includeClient(), new BeeModelGenerator(packOutput, existingFileHelper));
+//        generator.addProvider(event.includeClient(), new ParticleDescriptionGenerator(packOutput, existingFileHelper));
+//
+//        BlockTagGenerator blockTagGenerator = new BlockTagGenerator(packOutput, lookupProvider, existingFileHelper);
+//        generator.addProvider(event.includeServer(), blockTagGenerator);
+//        generator.addProvider(event.includeServer(), new ItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
+//        generator.addProvider(event.includeServer(), (DataProvider.Factory<LootTableGenerator>) pOutput -> new LootTableGenerator(packOutput));
+//        generator.addProvider(event.includeServer(), new RecipeGenerator(packOutput));
+//    }
 
-        generator.addProvider(event.includeClient(), new BlockStateGenerator(packOutput, existingFileHelper));
-        generator.addProvider(event.includeClient(), new ItemModelGenerator(packOutput, existingFileHelper));
-        generator.addProvider(event.includeClient(), new BeeModelGenerator(packOutput, existingFileHelper));
-        generator.addProvider(event.includeClient(), new ParticleDescriptionGenerator(packOutput, existingFileHelper));
+    @Override
+    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+        FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
-        BlockTagGenerator blockTagGenerator = new BlockTagGenerator(packOutput, lookupProvider, existingFileHelper);
-        generator.addProvider(event.includeServer(), blockTagGenerator);
-        generator.addProvider(event.includeServer(), new ItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
-        generator.addProvider(event.includeServer(), (DataProvider.Factory<LootTableGenerator>) pOutput -> new LootTableGenerator(packOutput));
-        generator.addProvider(event.includeServer(), new RecipeGenerator(packOutput));
+        BlockTagGenerator blockTagGenerator = pack.addProvider(BlockTagGenerator::new);
+        pack.addProvider((fabricDataOutput, completableFuture) -> new ItemTagGenerator(fabricDataOutput, completableFuture, blockTagGenerator));
+        pack.addProvider(BlockLootTables::new);
+        pack.addProvider(RecipeGenerator::new);
     }
 }

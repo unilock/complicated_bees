@@ -1,31 +1,30 @@
 package com.accbdd.complicated_bees.datagen;
 
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
-public class BlockTagGenerator extends BlockTagsProvider {
-    public static final TagKey<Block> SCOOPABLE = BlockTags.create(new ResourceLocation("complicated_bees:mineable/scoop_tool"));
+public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
+    public static final TagKey<Block> SCOOPABLE = TagKey.create(Registries.BLOCK, new ResourceLocation(MODID, "mineable/scoop_tool"));
 
-    public BlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, MODID, existingFileHelper);
+    public BlockTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
-        tag(SCOOPABLE).add(BlocksRegistration.BEE_NEST.get());
-        tag(BlockTags.MINEABLE_WITH_AXE).add(
+        getOrCreateTagBuilder(SCOOPABLE).add(BlocksRegistration.BEE_NEST.get());
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE).add(
                 BlocksRegistration.APIARY.get(),
                 BlocksRegistration.HONEYED_PLANKS.get(),
                 BlocksRegistration.HONEYED_STAIRS.get(),
@@ -37,7 +36,7 @@ public class BlockTagGenerator extends BlockTagsProvider {
                 BlocksRegistration.HONEYED_DOOR.get(),
                 BlocksRegistration.HONEYED_TRAPDOOR.get()
         );
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 BlocksRegistration.CENTRIFUGE.get(),
                 BlocksRegistration.CHISELED_WAX.get(),
                 BlocksRegistration.WAX_BLOCK.get(),
@@ -54,15 +53,15 @@ public class BlockTagGenerator extends BlockTagsProvider {
                 BlocksRegistration.WAX_BRICK_WALL.get(),
                 BlocksRegistration.CHISELED_WAX.get()
         );
-        tag(BlockTags.WALLS).add(
+        getOrCreateTagBuilder(BlockTags.WALLS).add(
                 BlocksRegistration.WAX_BLOCK_WALL.get(),
                 BlocksRegistration.SMOOTH_WAX_WALL.get(),
                 BlocksRegistration.WAX_BRICK_WALL.get()
         );
-        tag(BlockTags.FENCES).add(
+        getOrCreateTagBuilder(BlockTags.FENCES).add(
                 BlocksRegistration.HONEYED_FENCE.get()
         );
-        tag(BlockTags.FENCE_GATES).add(
+        getOrCreateTagBuilder(BlockTags.FENCE_GATES).add(
                 BlocksRegistration.HONEYED_FENCE_GATE.get()
         );
     }

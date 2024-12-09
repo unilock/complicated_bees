@@ -3,32 +3,31 @@ package com.accbdd.complicated_bees.datagen;
 import com.accbdd.complicated_bees.datagen.condition.ItemEnabledCondition;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
-public class RecipeGenerator extends RecipeProvider {
+public class RecipeGenerator extends FabricRecipeProvider {
 
-    public RecipeGenerator(PackOutput pOutput) {
-        super(pOutput);
+    public RecipeGenerator(FabricDataOutput output) {
+        super(output);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> output) {
-        frameRecipe(output, ItemsRegistration.FRAME.get(), Ingredient.of(Tags.Items.STRING), Ingredient.of(Tags.Items.RODS_WOODEN));
-        frameRecipe(output, ItemsRegistration.WAXED_FRAME.get(), Ingredient.of(Tags.Items.STRING), Ingredient.of(ItemsRegistration.WAXED_STICK.get()), ItemsRegistration.WAXED_STICK.get());
-        frameRecipe(output, ItemsRegistration.HONEYED_FRAME.get(), Ingredient.of(Tags.Items.STRING), Ingredient.of(ItemsRegistration.HONEYED_STICK.get()), ItemsRegistration.HONEYED_STICK.get());
+    public void buildRecipes(Consumer<FinishedRecipe> output) {
+        frameRecipe(output, ItemsRegistration.FRAME.get(), Ingredient.of(Items.STRING), Ingredient.of(Items.STICK));
+        frameRecipe(output, ItemsRegistration.WAXED_FRAME.get(), Ingredient.of(Items.STRING), Ingredient.of(ItemsRegistration.WAXED_STICK.get()), ItemsRegistration.WAXED_STICK.get());
+        frameRecipe(output, ItemsRegistration.HONEYED_FRAME.get(), Ingredient.of(Items.STRING), Ingredient.of(ItemsRegistration.HONEYED_STICK.get()), ItemsRegistration.HONEYED_STICK.get());
         frameRecipe(output, ItemsRegistration.TWISTING_FRAME.get(), Ingredient.of(Items.SOUL_SAND, Items.SOUL_SOIL), Ingredient.of(ItemsRegistration.WAXED_STICK.get()), ItemsRegistration.WAXED_STICK.get());
         frameRecipe(output, ItemsRegistration.SOOTHING_FRAME.get(), Ingredient.of(ItemsRegistration.ROYAL_JELLY.get()), Ingredient.of(ItemsRegistration.HONEYED_STICK.get()), ItemsRegistration.HONEYED_STICK.get());
         frameRecipe(output, ItemsRegistration.RESTRICTIVE_FRAME.get(), Ingredient.of(Items.CHAIN), Ingredient.of(ItemsRegistration.WAXED_STICK.get()), ItemsRegistration.WAXED_STICK.get());
@@ -46,12 +45,12 @@ public class RecipeGenerator extends RecipeProvider {
                 .pattern("#H#")
                 .pattern("###")
                 .define('H', ItemsRegistration.HONEY_DROPLET.get())
-                .define('#', Tags.Items.RODS_WOODEN)
+                .define('#', Items.STICK)
                 .unlockedBy(getHasName(ItemsRegistration.HONEY_DROPLET.get()), has(ItemsRegistration.HONEY_DROPLET.get()))
                 .save(output);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ItemsRegistration.WAXED_STICK.get())
                 .requires(ItemsRegistration.BEESWAX.get(), 1)
-                .requires(Ingredient.of(Tags.Items.RODS_WOODEN), 1)
+                .requires(Ingredient.of(Items.STICK), 1)
                 .unlockedBy(getHasName(ItemsRegistration.BEESWAX.get()), has(ItemsRegistration.BEESWAX.get()))
                 .save(output);
         enabledRecipe(ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ItemsRegistration.HONEY_BREAD.get())
@@ -83,7 +82,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .pattern("IGI")
                 .pattern("RWR")
                 .pattern("ITI")
-                .define('G', Tags.Items.GLASS_PANES)
+                .define('G', ConventionalItemTags.GLASS_PANES)
                 .define('I', Items.GOLD_INGOT)
                 .define('W', Items.DIAMOND)
                 .define('R', Items.REDSTONE)
@@ -93,7 +92,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .pattern("IGI")
                 .pattern("RWR")
                 .pattern("ITI")
-                .define('G', Tags.Items.GLASS_PANES)
+                .define('G', ConventionalItemTags.GLASS_PANES)
                 .define('I', Items.IRON_INGOT)
                 .define('W', Items.REDSTONE_TORCH)
                 .define('R', Items.REDSTONE)
@@ -103,7 +102,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .pattern("SWS")
                 .pattern("SSS")
                 .pattern(" S ")
-                .define('S', Tags.Items.RODS_WOODEN)
+                .define('S', Items.STICK)
                 .define('W', ItemTags.WOOL)
                 .unlockedBy("has_wool", has(ItemTags.WOOL)).save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemsRegistration.APIARY.get())
@@ -198,54 +197,57 @@ public class RecipeGenerator extends RecipeProvider {
         stonecutterResultFromBase(output, RecipeCategory.BUILDING_BLOCKS, BlocksRegistration.CHISELED_WAX.get(), BlocksRegistration.SMOOTH_WAX.get());
     }
 
-    protected static void frameRecipe(Consumer<FinishedRecipe> output, ItemLike result, Ingredient center, Ingredient outside) {
+    protected void frameRecipe(Consumer<FinishedRecipe> output, ItemLike result, Ingredient center, Ingredient outside) {
         frameRecipe(output, result, center, outside, ItemsRegistration.APIARY.get());
     }
 
-    protected static void frameRecipe(Consumer<FinishedRecipe> output, ItemLike result, Ingredient center, Ingredient outside, ItemLike unlockedBy) {
-        var recipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result)
+    protected void frameRecipe(Consumer<FinishedRecipe> output, ItemLike result, Ingredient center, Ingredient outside, ItemLike unlockedBy) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result)
                 .pattern("OOO")
                 .pattern("OXO")
                 .pattern("OOO")
                 .define('O', outside)
                 .define('X', center)
-                .unlockedBy(getHasName(unlockedBy), has(unlockedBy));
-        ConditionalRecipe.builder()
-                .addCondition(new ItemEnabledCondition(BuiltInRegistries.ITEM.getKey(result.asItem())))
-                .addRecipe(recipe::save)
-                .generateAdvancement()
-                .build(output, ForgeRegistries.ITEMS.getKey(result.asItem()));
+                .unlockedBy(getHasName(unlockedBy), has(unlockedBy))
+                .save(withConditions(output, new ItemEnabledCondition(BuiltInRegistries.ITEM.getKey(result.asItem()))));
+//        ConditionalRecipe.builder()
+//                .addCondition(new ItemEnabledCondition(BuiltInRegistries.ITEM.getKey(result.asItem())))
+//                .addRecipe(recipe::save)
+//                .generateAdvancement()
+//                .build(output, ForgeRegistries.ITEMS.getKey(result.asItem()));
     }
 
-    protected static void deadlyFrame(Consumer<FinishedRecipe> output) {
-        var recipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemsRegistration.DEADLY_FRAME.get())
+    protected void deadlyFrame(Consumer<FinishedRecipe> output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ItemsRegistration.DEADLY_FRAME.get())
                 .pattern("OCO")
                 .pattern("OXO")
                 .pattern("OOO")
                 .define('O', Items.OBSIDIAN)
                 .define('X', Items.SKELETON_SKULL)
                 .define('C', Items.CRYING_OBSIDIAN)
-                .unlockedBy("has_apiary", has(ItemsRegistration.APIARY.get()));
-        ConditionalRecipe.builder()
-                .addCondition(new ItemEnabledCondition(ForgeRegistries.ITEMS.getKey(ItemsRegistration.DEADLY_FRAME.get().asItem())))
-                .addRecipe(recipe::save)
-                .generateAdvancement()
-                .build(output, ForgeRegistries.ITEMS.getKey(ItemsRegistration.DEADLY_FRAME.get().asItem()));
+                .unlockedBy("has_apiary", has(ItemsRegistration.APIARY.get()))
+                .save(withConditions(output, new ItemEnabledCondition(BuiltInRegistries.ITEM.getKey(ItemsRegistration.DEADLY_FRAME.get()))));
+//        ConditionalRecipe.builder()
+//                .addCondition(new ItemEnabledCondition(ForgeRegistries.ITEMS.getKey(ItemsRegistration.DEADLY_FRAME.get().asItem())))
+//                .addRecipe(recipe::save)
+//                .generateAdvancement()
+//                .build(output, ForgeRegistries.ITEMS.getKey(ItemsRegistration.DEADLY_FRAME.get().asItem()));
     }
 
-    protected static void enabledRecipe(RecipeBuilder builder, Consumer<FinishedRecipe> output) {
-        ConditionalRecipe.builder()
-                .addCondition(new ItemEnabledCondition(ForgeRegistries.ITEMS.getKey(builder.getResult())))
-                .addRecipe(builder::save)
-                .generateAdvancement()
-                .build(output, ForgeRegistries.ITEMS.getKey(builder.getResult().asItem()));
+    protected void enabledRecipe(RecipeBuilder builder, Consumer<FinishedRecipe> output) {
+        builder.save(withConditions(output, new ItemEnabledCondition(BuiltInRegistries.ITEM.getKey(builder.getResult()))));
+//        ConditionalRecipe.builder()
+//                .addCondition(new ItemEnabledCondition(ForgeRegistries.ITEMS.getKey(builder.getResult())))
+//                .addRecipe(builder::save)
+//                .generateAdvancement()
+//                .build(output, ForgeRegistries.ITEMS.getKey(builder.getResult().asItem()));
     }
 
-    protected static void stonecutterFor(Consumer<FinishedRecipe> output, BlockFamily family) {
+    protected void stonecutterFor(Consumer<FinishedRecipe> output, BlockFamily family) {
         stonecutterFor(output, family, family.getBaseBlock());
     }
 
-    protected static void stonecutterFor(Consumer<FinishedRecipe> output, BlockFamily family, Block base) {
+    protected void stonecutterFor(Consumer<FinishedRecipe> output, BlockFamily family, Block base) {
         stonecutterResultFromBase(output, RecipeCategory.BUILDING_BLOCKS, family.get(BlockFamily.Variant.SLAB), base, 2);
         stonecutterResultFromBase(output, RecipeCategory.BUILDING_BLOCKS, family.get(BlockFamily.Variant.STAIRS), base);
         stonecutterResultFromBase(output, RecipeCategory.BUILDING_BLOCKS, family.get(BlockFamily.Variant.WALL), base);

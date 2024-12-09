@@ -5,9 +5,10 @@ import com.accbdd.complicated_bees.genetics.Species;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.accbdd.complicated_bees.registry.SpeciesRegistration;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +60,7 @@ public class BeeNestBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        if (!pPlayer.getMainHandItem().is(ItemTags.create(new ResourceLocation("complicated_bees", "scoop_tool"))) && pPlayer.canBeSeenAsEnemy()) {
+        if (!pPlayer.getMainHandItem().is(TagKey.create(Registries.ITEM, new ResourceLocation("complicated_bees", "scoop_tool"))) && pPlayer.canBeSeenAsEnemy()) {
             pPlayer.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
         }
         super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
@@ -73,7 +73,7 @@ public class BeeNestBlock extends BaseEntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
         ItemStack nest = new ItemStack(ItemsRegistration.BEE_NEST.get());
         CompoundTag tag = nest.getOrCreateTag();
         CompoundTag data = new CompoundTag();

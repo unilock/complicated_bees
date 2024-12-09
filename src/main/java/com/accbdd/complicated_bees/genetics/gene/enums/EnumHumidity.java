@@ -1,6 +1,7 @@
 package com.accbdd.complicated_bees.genetics.gene.enums;
 
 import com.accbdd.complicated_bees.ComplicatedBees;
+import com.accbdd.complicated_bees.mixin.BiomeAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -30,7 +31,7 @@ public enum EnumHumidity {
     }
 
     public static EnumHumidity getFromBiome(Holder<Biome> biome) {
-        return getFromValue(biome.value().getModifiedClimateSettings().downfall());
+        return getFromValue(((BiomeAccessor) biome.value()).getClimateSettings().downfall());
     }
 
     public static EnumHumidity getFromPosition(Level level, BlockPos pos) {

@@ -23,6 +23,10 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
+	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -54,6 +58,10 @@ dependencies {
 	}
 	modImplementation "net.fabricmc:fabric-loader:${loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+	modImplementation("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fcapi_version}") {
+		exclude group: "net.fabricmc"
+		exclude group: "net.fabricmc.fabric-api"
+	}
 	modImplementation "curse.maven:jade-324717:${jade_id}"
 
 	modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"

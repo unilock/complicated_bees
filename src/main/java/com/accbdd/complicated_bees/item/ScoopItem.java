@@ -9,17 +9,47 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeTier;
 
 public class ScoopItem extends DiggerItem {
 
     public ScoopItem(Properties pProperties) {
         super(0,
                 0,
-                new ForgeTier(1, 50, 4, 0, 15, null, () -> Ingredient.of(ItemTags.WOOL)),
+                new Tier() {
+                    @Override
+                    public int getUses() {
+                        return 50;
+                    }
+
+                    @Override
+                    public float getSpeed() {
+                        return 4;
+                    }
+
+                    @Override
+                    public float getAttackDamageBonus() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getLevel() {
+                        return 1;
+                    }
+
+                    @Override
+                    public int getEnchantmentValue() {
+                        return 15;
+                    }
+
+                    @Override
+                    public Ingredient getRepairIngredient() {
+                        return Ingredient.of(ItemTags.WOOL);
+                    }
+                },
                 BlockTagGenerator.SCOOPABLE,
                 pProperties.durability(50));
     }
@@ -33,15 +63,15 @@ public class ScoopItem extends DiggerItem {
     }
 
     @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState pBlock) {
+    public boolean isCorrectToolForDrops(BlockState pBlock) {
         if (pBlock.is(BlocksRegistration.BEE_NEST.get())) {
             return true;
         }
-        return super.isCorrectToolForDrops(stack, pBlock);
+        return super.isCorrectToolForDrops(pBlock);
     }
 
     @Override
-    public int getEnchantmentValue(ItemStack stack) {
+    public int getEnchantmentValue() {
         return 14;
     }
 

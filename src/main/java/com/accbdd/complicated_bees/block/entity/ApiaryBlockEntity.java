@@ -81,30 +81,50 @@ public class ApiaryBlockEntity extends BlockEntity {
     private final ItemStackHandler frameItems = createFrameHandler();
 
     private final CombinedSlottedStorage<ItemVariant, ItemStackHandler> itemHandler = new CombinedSlottedStorage<>(List.of(beeItems, outputItems, frameItems));
-//    private final LazyOptional<IItemHandler> beeItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(beeItems) {
-//        @Override
-//        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-//            return ItemStack.EMPTY;
-//        }
-//    });
-//
-//    private final LazyOptional<IItemHandler> outputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(outputItems) {
-//        @Override
-//        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-//            return stack;
-//        }
-//
-//        @Override
-//        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-//            return false;
-//        }
-//    });
-//    private final LazyOptional<IItemHandler> frameItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(frameItems) {
-//        @Override
-//        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-//            return stack.getItem() instanceof FrameItem;
-//        }
-//    });
+    private final ItemStackHandler beeItemHandler = new AdaptedItemHandler(beeItems) {
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public long extractSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public boolean supportsExtraction() {
+            return false;
+        }
+    };
+
+    private final ItemStackHandler outputItemHandler = new AdaptedItemHandler(outputItems) {
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public long insertSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemVariant resource, int count) {
+            return false;
+        }
+
+        @Override
+        public boolean supportsInsertion() {
+            return false;
+        }
+    };
+    private final ItemStackHandler frameItemHandler = new AdaptedItemHandler(frameItems) {
+        @Override
+        public boolean isItemValid(int slot, ItemVariant resource, int count) {
+            return resource.getItem() instanceof FrameItem;
+        }
+    };
 
 //    @Override
 //    public void invalidateCaps() {
@@ -174,17 +194,17 @@ public class ApiaryBlockEntity extends BlockEntity {
         return itemHandler;
     }
 
-//    public LazyOptional<IItemHandler> getBeeItemHandler() {
-//        return beeItemHandler;
-//    }
-//
-//    public LazyOptional<IItemHandler> getOutputItemHandler() {
-//        return outputItemHandler;
-//    }
-//
-//    public LazyOptional<IItemHandler> getFrameItemHandler() {
-//        return frameItemHandler;
-//    }
+    public ItemStackHandler getBeeItemHandler() {
+        return beeItemHandler;
+    }
+
+    public ItemStackHandler getOutputItemHandler() {
+        return outputItemHandler;
+    }
+
+    public ItemStackHandler getFrameItemHandler() {
+        return frameItemHandler;
+    }
 
     public ContainerData getData() {
         return this.data;

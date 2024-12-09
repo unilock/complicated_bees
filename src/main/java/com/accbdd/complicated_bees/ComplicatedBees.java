@@ -44,6 +44,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.config.ModConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import team.reborn.energy.api.EnergyStorage;
 
 import java.util.Map;
 import java.util.Set;
@@ -158,15 +159,22 @@ public class ComplicatedBees implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPING.register(this::serverStopping);
 
+        EnergyStorage.SIDED.registerForBlockEntity((centrifugeBlockEntity, direction) -> {
+            return centrifugeBlockEntity.getEnergyHandler();
+        }, BlockEntitiesRegistration.CENTRIFUGE_ENTITY.get());
+        EnergyStorage.SIDED.registerForBlockEntity((generatorBlockEntity, direction) -> {
+            return generatorBlockEntity.getEnergyHandler();
+        }, BlockEntitiesRegistration.GENERATOR_BLOCK_ENTITY.get());
+
 		//noinspection UnstableApiUsage
 		ItemStorage.SIDED.registerForBlockEntity((apiaryBlockEntity, direction) -> {
             if (direction == null) {
                 return apiaryBlockEntity.getItemHandler();
             }
             if (direction == Direction.DOWN) {
-                return apiaryBlockEntity.getOutputItems();
+                return apiaryBlockEntity.getOutputItemHandler();
             }
-            return apiaryBlockEntity.getBeeItems();
+            return apiaryBlockEntity.getBeeItemHandler();
         }, BlockEntitiesRegistration.APIARY_ENTITY.get());
         //noinspection UnstableApiUsage
         ItemStorage.SIDED.registerForBlockEntity((centrifugeBlockEntity, direction) -> {
@@ -174,13 +182,13 @@ public class ComplicatedBees implements ModInitializer {
                 return centrifugeBlockEntity.getItemHandler();
             }
             if (direction == Direction.DOWN) {
-                return centrifugeBlockEntity.getOutputItems();
+                return centrifugeBlockEntity.getOutputItemHandler();
             }
-            return centrifugeBlockEntity.getInputItems();
+            return centrifugeBlockEntity.getInputItemHandler();
         }, BlockEntitiesRegistration.CENTRIFUGE_ENTITY.get());
         //noinspection UnstableApiUsage
         ItemStorage.SIDED.registerForBlockEntity((generatorBlockEntity, direction) -> {
-            return generatorBlockEntity.getItems();
+            return generatorBlockEntity.getItemHandler();
         }, BlockEntitiesRegistration.GENERATOR_BLOCK_ENTITY.get());
     }
 

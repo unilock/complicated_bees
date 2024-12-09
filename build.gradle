@@ -72,6 +72,7 @@ dependencies {
 	}
 	modImplementation include("io.github.fabricators_of_create.Porting-Lib:models:${portinglib_version}")
 	modImplementation include("io.github.fabricators_of_create.Porting-Lib:transfer:${portinglib_version}")
+	modImplementation include("teamreborn:energy:${energy_version}")
 
 	modImplementation "curse.maven:jade-324717:${jade_id}"
 

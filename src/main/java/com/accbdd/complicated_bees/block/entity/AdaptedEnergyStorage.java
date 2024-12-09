@@ -1,43 +1,42 @@
 package com.accbdd.complicated_bees.block.entity;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import team.reborn.energy.api.EnergyStorage;
 
-import net.minecraftforge.energy.IEnergyStorage;
+public class AdaptedEnergyStorage implements EnergyStorage {
+    private final EnergyStorage storage;
 
-public class AdaptedEnergyStorage implements IEnergyStorage {
-
-    private final IEnergyStorage storage;
-
-    public AdaptedEnergyStorage(IEnergyStorage storage) {
+    public AdaptedEnergyStorage(EnergyStorage storage) {
         this.storage = storage;
     }
 
     @Override
-    public int receiveEnergy(int maxReceive, boolean simulate) {
-        return storage.receiveEnergy(maxReceive, simulate);
+    public boolean supportsInsertion() {
+        return storage.supportsInsertion();
     }
 
     @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
-        return storage.extractEnergy(maxExtract, simulate);
+    public boolean supportsExtraction() {
+        return storage.supportsExtraction();
     }
 
     @Override
-    public int getEnergyStored() {
-        return storage.getEnergyStored();
+    public long insert(long l, TransactionContext transactionContext) {
+        return storage.insert(l, transactionContext);
     }
 
     @Override
-    public int getMaxEnergyStored() {
-        return storage.getMaxEnergyStored();
+    public long extract(long l, TransactionContext transactionContext) {
+        return storage.extract(l, transactionContext);
     }
 
     @Override
-    public boolean canExtract() {
-        return storage.canExtract();
+    public long getAmount() {
+        return storage.getAmount();
     }
 
     @Override
-    public boolean canReceive() {
-        return storage.canReceive();
+    public long getCapacity() {
+        return storage.getCapacity();
     }
 }

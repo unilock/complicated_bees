@@ -4,6 +4,8 @@ import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.util.TransferUtilExtras;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -14,12 +16,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
+import team.reborn.energy.api.EnergyStorage;
+import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 public class GeneratorBlockEntity extends BlockEntity {
     public static final String ITEMS_TAG = "items";
@@ -34,35 +33,45 @@ public class GeneratorBlockEntity extends BlockEntity {
     public static final int SLOT = 0;
 
     private final ItemStackHandler items = createItemHandler();
-//    private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new AdaptedItemHandler(items) {
-//        @Override
-//        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-//            return ItemStack.EMPTY;
-//        }
-//    });
+    private final ItemStackHandler itemHandler = new AdaptedItemHandler(items) {
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
 
-    private final EnergyStorage energy = createEnergyStorage();
-//    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new AdaptedEnergyStorage(energy) {
-//        @Override
-//        public int receiveEnergy(int maxReceive, boolean simulate) {
-//            return 0;
-//        }
-//
-//        @Override
-//        public int extractEnergy(int maxExtract, boolean simulate) {
-//            return 0;
-//        }
-//
-//        @Override
-//        public boolean canExtract() {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean canReceive() {
-//            return false;
-//        }
-//    });
+        @Override
+        public long extractSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public boolean supportsExtraction() {
+            return false;
+        }
+    };
+
+    private final SimpleEnergyStorage energy = createEnergyStorage();
+    private final EnergyStorage energyHandler = new AdaptedEnergyStorage(energy) {
+        @Override
+        public long insert(long l, TransactionContext transactionContext) {
+            return 0L;
+        }
+
+        @Override
+        public long extract(long l, TransactionContext transactionContext) {
+            return 0L;
+        }
+
+        @Override
+        public boolean supportsExtraction() {
+            return false;
+        }
+
+        @Override
+        public boolean supportsInsertion() {
+            return false;
+        }
+    };
 
     private int burnTime;
     private int maxBurnTime;
@@ -94,7 +103,7 @@ public class GeneratorBlockEntity extends BlockEntity {
     }
 
     private void generateEnergy() {
-        if (energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+        if (energy.getAmount() < energy.getCapacity()) {
             if (burnTime <= 0) {
                 ItemStack fuel = items.getStackInSlot(SLOT);
                 if (fuel.isEmpty()) {
@@ -109,7 +118,7 @@ public class GeneratorBlockEntity extends BlockEntity {
                 TransferUtilExtras.extractAnySlot(items, SLOT, 1);
             } else {
                 setBurnTime(burnTime - 1);
-                energy.receiveEnergy(GENERATE, false);
+                TransferUtilExtras.receiveEnergy(energy, GENERATE);
             }
             setChanged();
         }
@@ -129,16 +138,17 @@ public class GeneratorBlockEntity extends BlockEntity {
     private void distributeEnergy() {
         // Check all sides of the block and send energy if that block supports the energy capability
         for (Direction direction : Direction.values()) {
-            if (energy.getEnergyStored() <= 0) {
+            if (energy.getAmount() <= 0L) {
                 return;
             }
             var be = getLevel().getBlockEntity(getBlockPos().relative(direction));
             if (be != null) {
-                IEnergyStorage energy = be.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+                // TODO: verify that this direction stuff is correct
+                EnergyStorage energy = EnergyStorage.SIDED.find(getLevel(), getBlockPos().relative(direction), direction.getOpposite());
                 if (energy != null) {
-                    if (energy.canReceive()) {
-                        int received = energy.receiveEnergy(Math.min(this.energy.getEnergyStored(), MAXTRANSFER), false);
-                        this.energy.extractEnergy(received, false);
+                    if (energy.supportsInsertion()) {
+                        long received = TransferUtilExtras.receiveEnergy(energy, Math.min(this.energy.getAmount(), MAXTRANSFER));
+                        TransferUtilExtras.extractEnergy(this.energy, received);
                         setChanged();
                     }
                 }
@@ -155,7 +165,7 @@ public class GeneratorBlockEntity extends BlockEntity {
     }
 
     public int getStoredPower() {
-        return energy.getEnergyStored();
+        return (int) energy.getAmount();
     }
 
     @Override
@@ -191,18 +201,18 @@ public class GeneratorBlockEntity extends BlockEntity {
         };
     }
 
-    @Nonnull
-    private EnergyStorage createEnergyStorage() {
-        return new EnergyStorage(CAPACITY, MAXTRANSFER, MAXTRANSFER);
+    @NotNull
+    private SimpleEnergyStorage createEnergyStorage() {
+        return new SimpleEnergyStorage(CAPACITY, MAXTRANSFER, MAXTRANSFER);
     }
 
-//    public LazyOptional<IItemHandler> getItemHandler() {
-//        return itemHandler;
-//    }
+    public ItemStackHandler getItemHandler() {
+        return itemHandler;
+    }
 
-//    public LazyOptional<IEnergyStorage> getEnergyHandler() {
-//        return energyHandler;
-//    }
+    public EnergyStorage getEnergyHandler() {
+        return energyHandler;
+    }
 
     public int getMaxBurnTime() {
         return maxBurnTime;

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.world.item.ItemStack;
+import team.reborn.energy.api.EnergyStorage;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TransferUtilExtras {
@@ -42,6 +43,40 @@ public class TransferUtilExtras {
 			ItemStack stack = extractAnySlot(storage, slot, maxAmount, tx);
 			tx.commit();
 			return stack;
+		}
+	}
+
+	public static long receiveEnergy(EnergyStorage storage, long maxAmount, Transaction tx) {
+		if (!storage.supportsInsertion()) {
+			return 0L;
+		} else {
+			int max = (int) Math.min(2147483647L, maxAmount);
+			return storage.insert(max, tx);
+		}
+	}
+
+	public static long receiveEnergy(EnergyStorage storage, long maxAmount) {
+		try (Transaction tx = TransferUtil.getTransaction()) {
+			long received = receiveEnergy(storage, maxAmount, tx);
+			tx.commit();
+			return received;
+		}
+	}
+
+	public static long extractEnergy(EnergyStorage storage, long maxAmount, Transaction tx) {
+		if (!storage.supportsExtraction()) {
+			return 0L;
+		} else {
+			int max = (int) Math.min(2147483647L, maxAmount);
+			return storage.extract(max, tx);
+		}
+	}
+
+	public static long extractEnergy(EnergyStorage storage, long maxAmount) {
+		try (Transaction tx = TransferUtil.getTransaction()) {
+			long extracted = extractEnergy(storage, maxAmount, tx);
+			tx.commit();
+			return extracted;
 		}
 	}
 }

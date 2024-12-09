@@ -11,6 +11,7 @@ import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandle
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,9 +23,8 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
+import team.reborn.energy.api.EnergyStorage;
+import team.reborn.energy.api.base.SimpleEnergyStorage;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,23 +58,43 @@ public class CentrifugeBlockEntity extends BlockEntity {
     private final ItemStackHandler inputItems = createItemHandler(INPUT_SLOT_COUNT);
     private final ItemStackHandler outputItems = createItemHandler(OUTPUT_SLOT_COUNT);
     private final CombinedSlottedStorage<ItemVariant, ItemStackHandler> itemHandler = new CombinedSlottedStorage<>(List.of(inputItems, outputItems));
-//    private final LazyOptional<IItemHandler> inputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(inputItems) {
-//        @Override
-//        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-//            return ItemStack.EMPTY;
-//        }
-//    });
-//    private final LazyOptional<IItemHandler> outputItemHandler = LazyOptional.of(() -> new AdaptedItemHandler(outputItems) {
-//        @Override
-//        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-//            return stack;
-//        }
-//
-//        @Override
-//        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-//            return false;
-//        }
-//    });
+    private final ItemStackHandler inputItemHandler = new AdaptedItemHandler(inputItems) {
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public long extractSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public boolean supportsExtraction() {
+            return false;
+        }
+    };
+    private final ItemStackHandler outputItemHandler = new AdaptedItemHandler(outputItems) {
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public long insertSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            return 0L;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemVariant resource, int count) {
+            return false;
+        }
+
+        @Override
+        public boolean supportsInsertion() {
+            return false;
+        }
+    };
 
 //    @Override
 //    public void invalidateCaps() {
@@ -139,37 +159,37 @@ public class CentrifugeBlockEntity extends BlockEntity {
         return itemHandler;
     }
 
-//    public LazyOptional<IItemHandler> getInputItemHandler() {
-//        return inputItemHandler;
-//    }
-//
-//    public LazyOptional<IItemHandler> getOutputItemHandler() {
-//        return outputItemHandler;
-//    }
+    public ItemStackHandler getInputItemHandler() {
+        return inputItemHandler;
+    }
 
-    private final EnergyStorage energy = createEnergyStorage();
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new AdaptedEnergyStorage(energy) {
+    public ItemStackHandler getOutputItemHandler() {
+        return outputItemHandler;
+    }
+
+    private final SimpleEnergyStorage energy = createEnergyStorage();
+    private final EnergyStorage energyHandler = new AdaptedEnergyStorage(energy) {
         @Override
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            return 0;
+        public long extract(long l, TransactionContext transactionContext) {
+            return 0L;
         }
 
         @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
+        public long insert(long l, TransactionContext transactionContext) {
             setChanged();
-            return super.receiveEnergy(maxReceive, simulate);
+            return super.insert(l, transactionContext);
         }
 
         @Override
-        public boolean canExtract() {
+        public boolean supportsExtraction() {
             return false;
         }
 
         @Override
-        public boolean canReceive() {
+        public boolean supportsInsertion() {
             return true;
         }
-    });
+    };
 
     private ItemStackHandler createItemHandler(int slots) {
         return new ItemStackHandler(slots) {
@@ -180,16 +200,16 @@ public class CentrifugeBlockEntity extends BlockEntity {
         };
     }
 
-    private EnergyStorage createEnergyStorage() {
-        return new EnergyStorage(CAPACITY, MAXTRANSFER, MAXTRANSFER);
+    private SimpleEnergyStorage createEnergyStorage() {
+        return new SimpleEnergyStorage(CAPACITY, MAXTRANSFER, MAXTRANSFER);
     }
 
-//    public LazyOptional<IEnergyStorage> getEnergyHandler() {
-//        return energyHandler;
-//    }
+    public EnergyStorage getEnergyHandler() {
+        return energyHandler;
+    }
 
     public int getStoredPower() {
-        return energy.getEnergyStored();
+        return (int) energy.getAmount();
     }
 
     @Override
@@ -231,7 +251,7 @@ public class CentrifugeBlockEntity extends BlockEntity {
             tryEmptyBuffer();
         }
 
-        if (hasRecipe(stack) && energy.getEnergyStored() > 0 && outputBuffer.empty()) {
+        if (hasRecipe(stack) && energy.getAmount() > 0L && outputBuffer.empty()) {
             if (!getBlockState().getValue(BlockStateProperties.POWERED)) {
                 level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, true));
             }
@@ -269,7 +289,7 @@ public class CentrifugeBlockEntity extends BlockEntity {
     }
 
     private void increaseCraftingProgress() {
-        energy.extractEnergy(USAGE, false);
+        TransferUtilExtras.extractEnergy(energy, USAGE);
         progress++;
     }
 

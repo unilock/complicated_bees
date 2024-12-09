@@ -111,6 +111,11 @@ jar {
 	into('assets') {
 		from('src/generated/resources/assets')
 	}
+
+	exclude 'data/complicated_bees/worldgen/configured_feature/biomesoplenty'
+	exclude 'data/complicated_bees/worldgen/configured_feature/terralith'
+	exclude 'data/complicated_bees/worldgen/placed_feature/biomesoplenty'
+	exclude 'data/complicated_bees/worldgen/placed_feature/terralith'
 }
 
 // Configure the maven publication

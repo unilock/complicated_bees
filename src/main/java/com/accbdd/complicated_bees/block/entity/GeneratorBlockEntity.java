@@ -4,6 +4,7 @@ import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.util.TransferUtilExtras;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
@@ -11,11 +12,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
@@ -109,7 +108,7 @@ public class GeneratorBlockEntity extends BlockEntity {
                 if (fuel.isEmpty()) {
                     return;
                 }
-                int burnTime = ForgeHooks.getBurnTime(fuel, RecipeType.SMELTING);
+                int burnTime = FuelRegistry.INSTANCE.get(fuel.getItem());
                 maxBurnTime = burnTime;
                 setBurnTime(burnTime);
                 if (burnTime <= 0) {

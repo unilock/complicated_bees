@@ -171,7 +171,7 @@ public class GeneratorBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put(ITEMS_TAG, items.serializeNBT());
-        tag.put(ENERGY_TAG, energy.serializeNBT());
+        tag.putLong(ENERGY_TAG, energy.getAmount());
         tag.put(BURN_TIME_TAG, IntTag.valueOf(burnTime));
     }
 
@@ -182,7 +182,7 @@ public class GeneratorBlockEntity extends BlockEntity {
             items.deserializeNBT(tag.getCompound(ITEMS_TAG));
         }
         if (tag.contains(ENERGY_TAG)) {
-            energy.deserializeNBT(tag.get(ENERGY_TAG));
+            energy.amount = tag.getLong(ENERGY_TAG);
         }
         if (tag.contains(BURN_TIME_TAG)) {
             burnTime = tag.getInt(BURN_TIME_TAG);

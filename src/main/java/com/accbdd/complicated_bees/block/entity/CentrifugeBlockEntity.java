@@ -217,7 +217,7 @@ public class CentrifugeBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         tag.put(ITEMS_INPUT_TAG, inputItems.serializeNBT());
         tag.put(ITEMS_OUTPUT_TAG, outputItems.serializeNBT());
-        tag.put(ENERGY_TAG, energy.serializeNBT());
+        tag.putLong(ENERGY_TAG, energy.getAmount());
         ListTag bufferTag = new ListTag();
         for (ItemStack stack : outputBuffer) {
             bufferTag.add(stack.save(new CompoundTag()));
@@ -240,7 +240,7 @@ public class CentrifugeBlockEntity extends BlockEntity {
             }
         }
         if (tag.contains(ENERGY_TAG)) {
-            energy.deserializeNBT(tag.get(ENERGY_TAG));
+            energy.amount = tag.getLong(ENERGY_TAG);
         }
     }
 

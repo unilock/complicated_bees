@@ -3,13 +3,13 @@ package com.accbdd.complicated_bees.screen;
 import com.accbdd.complicated_bees.block.entity.CentrifugeBlockEntity;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
 import com.accbdd.complicated_bees.registry.MenuRegistration;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.SlotItemHandler;
 
 import static com.accbdd.complicated_bees.block.entity.CentrifugeBlockEntity.*;
 

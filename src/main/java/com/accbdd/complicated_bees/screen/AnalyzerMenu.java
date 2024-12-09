@@ -4,6 +4,8 @@ import com.accbdd.complicated_bees.datagen.ItemTagGenerator;
 import com.accbdd.complicated_bees.item.BeeItem;
 import com.accbdd.complicated_bees.registry.MenuRegistration;
 import com.accbdd.complicated_bees.screen.slot.TagSlot;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -11,8 +13,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 
+@SuppressWarnings("UnstableApiUsage")
 public class AnalyzerMenu extends AbstractContainerMenu {
     public static final int SLOT_COUNT = 2;
     private static final String INVENTORY_TAG = "contents";
@@ -26,11 +28,12 @@ public class AnalyzerMenu extends AbstractContainerMenu {
         this.handler = new ItemStackHandler(2) {
             @Override
             protected void onContentsChanged(int slot) {
-                if (getSlot(0).hasItem()) {
-                    ItemStack bee = getSlot(1).getItem();
+                if (!getSlot(0).isResourceBlank()) {
+                    ItemStack bee = getSlot(1).getResource().toStack((int) getSlot(1).getAmount());
                     if (!isBeeAnalyzed() && !bee.isEmpty()) {
                         bee.getOrCreateTag().putBoolean(BeeItem.ANALYZED_TAG, true);
-                        getSlot(0).remove(1);
+                        getSlot(1).setNewStack(bee);
+                        TransferUtil.extractAnyItem(getSlot(0), 1);
                     }
                 }
                 player.getInventory().getItem(bagSlot).getOrCreateTag().put(INVENTORY_TAG, this.serializeNBT());

@@ -1,15 +1,15 @@
 package com.accbdd.complicated_bees.screen.slot;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class TagSlot extends SlotItemHandler {
     private final TagKey<Item> tag;
 
-    public TagSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, TagKey<Item> tag) {
+    public TagSlot(ItemStackHandler itemHandler, int index, int xPosition, int yPosition, TagKey<Item> tag) {
         super(itemHandler, index, xPosition, yPosition);
         this.tag = tag;
     }

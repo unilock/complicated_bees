@@ -5,10 +5,12 @@ import com.accbdd.complicated_bees.genetics.Product;
 import com.accbdd.complicated_bees.recipe.CentrifugeRecipe;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.registry.EsotericRegistration;
+import com.accbdd.complicated_bees.screen.CentrifugeMenu;
 import com.accbdd.complicated_bees.util.TransferUtilExtras;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -16,13 +18,20 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
@@ -30,8 +39,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
+import static com.accbdd.complicated_bees.block.CentrifugeBlock.SCREEN_CENTRIFUGE;
+
 @SuppressWarnings("UnstableApiUsage")
-public class CentrifugeBlockEntity extends BlockEntity {
+public class CentrifugeBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     public static final int INPUT_SLOT = 0;
     public static final int INPUT_SLOT_COUNT = 1;
     public static final String ITEMS_INPUT_TAG = "input_items";
@@ -339,5 +350,20 @@ public class CentrifugeBlockEntity extends BlockEntity {
 
     public RecipeWrapper getWrapper() {
         return new RecipeWrapper(inputItems);
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayer serverPlayer, FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeBlockPos(getBlockPos());
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(SCREEN_CENTRIFUGE);
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
+        return new CentrifugeMenu(windowId, player, getBlockPos(), getData());
     }
 }

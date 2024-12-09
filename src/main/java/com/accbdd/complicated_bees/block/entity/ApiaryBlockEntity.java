@@ -13,11 +13,13 @@ import com.accbdd.complicated_bees.item.*;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
 import com.accbdd.complicated_bees.registry.FlowerRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
+import com.accbdd.complicated_bees.screen.ApiaryMenu;
 import com.accbdd.complicated_bees.util.BlockPosBoxIterator;
 import com.accbdd.complicated_bees.util.TransferUtilExtras;
 import com.accbdd.complicated_bees.util.enums.EnumErrorCodes;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -26,13 +28,20 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +49,10 @@ import java.util.Random;
 import java.util.Stack;
 
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
+import static com.accbdd.complicated_bees.block.ApiaryBlock.SCREEN_APIARY;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ApiaryBlockEntity extends BlockEntity {
+public class ApiaryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     public static final int BEE_SLOT = 0;
     public static final int BEE_SLOT_COUNT = 2;
     public static final String ITEMS_BEES_TAG = "bee_items";
@@ -611,5 +621,20 @@ public class ApiaryBlockEntity extends BlockEntity {
         for (EnumErrorCodes err : error) {
             errorState = (errorState & (err.value ^ Integer.MAX_VALUE));
         }
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayer serverPlayer, FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeBlockPos(getBlockPos());
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(SCREEN_APIARY);
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
+        return new ApiaryMenu(windowId, player, getBlockPos(), getData());
     }
 }

@@ -2,24 +2,35 @@ package com.accbdd.complicated_bees.block.entity;
 
 import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
+import com.accbdd.complicated_bees.screen.GeneratorMenu;
 import com.accbdd.complicated_bees.util.TransferUtilExtras;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
-public class GeneratorBlockEntity extends BlockEntity {
+import static com.accbdd.complicated_bees.block.GeneratorBlock.SCREEN_GENERATOR;
+
+public class GeneratorBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     public static final String ITEMS_TAG = "items";
     public static final String ENERGY_TAG = "energy";
     public static final String BURN_TIME_TAG = "burn_time";
@@ -215,5 +226,20 @@ public class GeneratorBlockEntity extends BlockEntity {
 
     public int getMaxBurnTime() {
         return maxBurnTime;
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayer serverPlayer, FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeBlockPos(getBlockPos());
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(SCREEN_GENERATOR);
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
+        return new GeneratorMenu(windowId, player, getBlockPos());
     }
 }

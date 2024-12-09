@@ -23,6 +23,15 @@
 		],
 		"client": [
 			"com.accbdd.complicated_bees.ComplicatedBeesClient"
+		],
+		"emi": [
+			"com.accbdd.complicated_bees.compat.emi.ComplicatedBeesEMI"
+		],
+		"jade": [
+			"com.accbdd.complicated_bees.compat.jade.ComplicatedBeesJade"
+		],
+		"jei_mod_plugin": [
+			"com.accbdd.complicated_bees.compat.jei.ComplicatedBeesJEI"
 		]
 	},
 	"accessWidener": "complicated_bees.accesswidener",

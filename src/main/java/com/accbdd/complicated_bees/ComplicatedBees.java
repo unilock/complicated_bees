@@ -55,7 +55,7 @@ public class ComplicatedBees implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static final Registry<IGene<?>> GENE_REGISTRY = FabricRegistryBuilder.<IGene<?>>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "gene"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
     public static final Registry<IBeeEffect> BEE_EFFECT_REGISTRY = FabricRegistryBuilder.<IBeeEffect>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "bee_effect"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
-    public static final Registry<IMutationCondition> MUTATION_CONDITION_REGISTRY = FabricRegistryBuilder.<IMutationCondition>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "mutation"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+    public static final Registry<IMutationCondition> MUTATION_CONDITION_REGISTRY = FabricRegistryBuilder.<IMutationCondition>createSimple(ResourceKey.createRegistryKey(new ResourceLocation(MODID, "mutation_condition"))).attribute(RegistryAttribute.SYNCED).buildAndRegister();
 
     public static final CreativeModeTab BEES_TAB = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(MODID, "complicated_bees"), FabricItemGroup.builder()
             .title(Component.translatable("itemGroup.complicated_bees"))

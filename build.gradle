@@ -108,8 +108,8 @@ java {
 }
 
 jar {
-	from('src/generated') {
-		include 'assets'
+	into('assets') {
+		from('src/generated/resources/assets')
 	}
 }
 

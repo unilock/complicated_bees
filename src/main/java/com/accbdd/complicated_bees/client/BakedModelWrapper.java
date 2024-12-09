@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class BakedModelWrapper<T extends BakedModel> implements BakedModel {
-	private final BakedModel original;
+	private final T original;
 
-	public BakedModelWrapper(BakedModel original) {
+	public BakedModelWrapper(T original) {
 		this.original = original;
 	}
 

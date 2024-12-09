@@ -1,12 +1,10 @@
 package com.accbdd.complicated_bees.datagen;
 
-import com.accbdd.complicated_bees.client.BeeModelBuilder;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -83,26 +81,15 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ItemsRegistration.AMBROSIA.get());
         basicItem(ItemsRegistration.BEE_STAFF.get());
 
-        createBeeModel(ItemsRegistration.DRONE.getId());
-        createBeeModel(ItemsRegistration.PRINCESS.getId()).texture("layer2", modLoc("item/princess_crown"));
-        createBeeModel(ItemsRegistration.QUEEN.getId()).texture("layer2", modLoc("item/queen_crown"));
+//        createBeeModel(ItemsRegistration.DRONE.getId());
+//        createBeeModel(ItemsRegistration.PRINCESS.getId()).texture("layer2", modLoc("item/princess_crown"));
+//        createBeeModel(ItemsRegistration.QUEEN.getId()).texture("layer2", modLoc("item/queen_crown"));
         createCombModel();
 
         //patchouli book model
         getBuilder("complicated_bees:apiarist_guide")
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", modLoc("item/patchouli/apiarist_guide"));
-    }
-
-    private ItemModelBuilder createBeeModel(ResourceLocation bee_type) {
-        ResourceLocation bee_base = modLoc("item/bee_base");
-        ResourceLocation bee_outline = modLoc("item/bee_outline");
-
-        return getBuilder(bee_type.toString())
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", bee_base)
-                .texture("layer1", bee_outline)
-                .customLoader(BeeModelBuilder::begin).end();
     }
 
     private void createCombModel() {

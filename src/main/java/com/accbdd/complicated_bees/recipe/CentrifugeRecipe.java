@@ -96,7 +96,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack assemble(Container pContainer, RegistryAccess pRegistryAccess) {
-        ComplicatedBees.LOGGER.error("Centrifuge recipe tried to use assemble! Use getOutputs instead");
+        ComplicatedBees.LOGGER.debug("tried to use assemble on a CentrifugeRecipe! Use getOutputs instead");
         return ItemStack.EMPTY;
     }
 
@@ -115,7 +115,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        ComplicatedBees.LOGGER.error("Centrifuge recipe tried to use getResultItem! Use getOutputs instead");
+        ComplicatedBees.LOGGER.debug("tried to use getResultItem on a CentrifugeRecipe! Use getOutputs instead");
         return ItemStack.EMPTY;
     }
 

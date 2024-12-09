@@ -50,6 +50,7 @@ public class DataGenerators {
 
         generator.addProvider(event.includeClient(), new BlockStateGenerator(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new ItemModelGenerator(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new BeeModelGenerator(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new ParticleDescriptionGenerator(packOutput, existingFileHelper));
 
         BlockTagGenerator blockTagGenerator = new BlockTagGenerator(packOutput, lookupProvider, existingFileHelper);

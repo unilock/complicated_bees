@@ -1,0 +1,12 @@
+{
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "biomesoplenty"
+    }
+  ],
+  "type": "complicated_bees:complicated_bee_nest",
+  "config": {
+    "species": "complicated_bees:plains"
+  }
+}

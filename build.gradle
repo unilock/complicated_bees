@@ -19,6 +19,10 @@ repositories {
 		name = "BlameJared"
 		url = "https://maven.blamejared.com/"
 	}
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -54,8 +58,13 @@ dependencies {
 
 	modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
 	modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}"
+    modCompileOnlyApi "dev.emi:emi-fabric:${emi_version}:api"
 
-	modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+    if (runtime_recipe_viewer == "jei") {
+        modLocalRuntime "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+    } else if (runtime_recipe_viewer == "emi") {
+        modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
+    }
 }
 
 processResources {

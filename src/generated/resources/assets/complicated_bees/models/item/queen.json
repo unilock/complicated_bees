@@ -1,14 +1,11 @@
 {
-  "parent": "minecraft:item/generated",
-  "forge_data": {
-    "layers": {}
+  "base_model": {
+    "parent": "minecraft:item/generated",
+    "textures": {
+      "layer0": "complicated_bees:item/bee_base",
+      "layer1": "complicated_bees:item/bee_outline",
+      "layer2": "complicated_bees:item/queen_crown"
+    }
   },
-  "loader": "complicated_bees:bee_model",
-  "render_types": {},
-  "textures": {
-    "layer0": "complicated_bees:item/bee_base",
-    "layer1": "complicated_bees:item/bee_outline",
-    "layer2": "complicated_bees:item/queen_crown"
-  },
-  "variants": {}
+  "loader": "complicated_bees:optimized_bee_model"
 }

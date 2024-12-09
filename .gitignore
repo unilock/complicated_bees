@@ -21,6 +21,9 @@ build
 eclipse
 run
 runs
+runs_data_forge
+runs_forge
+runs_server_forge
 
 # Files from Forge MDK
 forge*changelog.txt

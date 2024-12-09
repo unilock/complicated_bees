@@ -1,0 +1,54 @@
+name: Publish on CurseForge & Modrinth    #The name of your GitHub Action on github.com
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  MODRINTH_TOKEN: ${{ secrets.PUBLISH_MODRINTH_TOKEN }}
+  CURSEFORGE_TOKEN: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
+
+permissions:
+  contents: write
+
+jobs:
+  build-1-20-1:
+    runs-on: ubuntu-latest
+    env:
+      MINECRAFT_VERSION: 1.20.1
+      JAVA_VERSION: 17
+    steps:
+      - name: Check Environment Variables
+        run: env
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "temurin"
+          java-version: 17
+
+      - name: Make Gradle Wrapper Executable
+        if: ${{ runner.os != 'Windows' }}
+        run: chmod +x ./gradlew
+
+      - name: Build
+        run: ./gradlew clean build
+
+      - name: Publish to Curseforge & Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: 1100137
+          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+
+          modrinth-id: uhqEKIQS
+          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+
+          version-type: release
+
+          loaders: forge

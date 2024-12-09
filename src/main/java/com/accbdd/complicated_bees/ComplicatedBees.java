@@ -13,7 +13,19 @@ import com.accbdd.complicated_bees.genetics.gene.IGene;
 import com.accbdd.complicated_bees.genetics.mutation.Mutation;
 import com.accbdd.complicated_bees.genetics.mutation.condition.IMutationCondition;
 import com.accbdd.complicated_bees.item.CombItem;
-import com.accbdd.complicated_bees.registry.*;
+import com.accbdd.complicated_bees.registry.BeeEffectRegistration;
+import com.accbdd.complicated_bees.registry.BlockEntitiesRegistration;
+import com.accbdd.complicated_bees.registry.BlocksRegistration;
+import com.accbdd.complicated_bees.registry.CombRegistration;
+import com.accbdd.complicated_bees.registry.EntitiesRegistration;
+import com.accbdd.complicated_bees.registry.EsotericRegistration;
+import com.accbdd.complicated_bees.registry.FlowerRegistration;
+import com.accbdd.complicated_bees.registry.GeneRegistration;
+import com.accbdd.complicated_bees.registry.ItemsRegistration;
+import com.accbdd.complicated_bees.registry.MenuRegistration;
+import com.accbdd.complicated_bees.registry.MutationRegistration;
+import com.accbdd.complicated_bees.registry.SpeciesRegistration;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
@@ -21,8 +33,9 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
-import net.minecraft.client.Minecraft;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -35,7 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -108,28 +120,35 @@ public class ComplicatedBees implements ModInitializer {
                 output.accept(ItemsRegistration.HONEY_BREAD.get());
                 output.accept(ItemsRegistration.HONEY_PORKCHOP.get());
                 output.accept(ItemsRegistration.AMBROSIA.get());
-                Set<Map.Entry<ResourceKey<Species>, Species>> speciesSet = Objects.requireNonNull(Minecraft.getInstance().getConnection()).registryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().entrySet();
-                for (Map.Entry<ResourceKey<Species>, Species> entry : speciesSet) {
-                    output.accept(GeneticHelper.setBothGenome(ItemsRegistration.DRONE.get().getDefaultInstance(), entry.getValue().getDefaultChromosome()));
-                    output.accept(GeneticHelper.setBothGenome(ItemsRegistration.PRINCESS.get().getDefaultInstance(), entry.getValue().getDefaultChromosome()));
-                    output.accept(GeneticHelper.setBothGenome(ItemsRegistration.QUEEN.get().getDefaultInstance(), entry.getValue().getDefaultChromosome()));
-                }
-                for (ResourceLocation id : Minecraft.getInstance().getConnection().registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().keySet()) {
-                    output.accept(CombItem.setComb(ItemsRegistration.COMB.get().getDefaultInstance(), id));
-                }
-                for (Map.Entry<ResourceKey<Species>, Species> entry : speciesSet) {
-                    output.accept(BeeNestBlock.stackNest(ItemsRegistration.BEE_NEST.get().getDefaultInstance(), entry.getValue()));
+                RegistryAccess access = GeneticHelper.getRegistryAccess();
+                if (access != null) {
+                    Set<Map.Entry<ResourceKey<Species>, Species>> speciesSet = access.registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().entrySet();
+                    for (Map.Entry<ResourceKey<Species>, Species> entry : speciesSet) {
+                        output.accept(GeneticHelper.setBothGenome(ItemsRegistration.DRONE.get().getDefaultInstance(), entry.getValue().getDefaultChromosome()));
+                        output.accept(GeneticHelper.setBothGenome(ItemsRegistration.PRINCESS.get().getDefaultInstance(), entry.getValue().getDefaultChromosome()));
+                        output.accept(GeneticHelper.setBothGenome(ItemsRegistration.QUEEN.get().getDefaultInstance(), entry.getValue().getDefaultChromosome()));
+                    }
+                    for (ResourceLocation id : access.registry(CombRegistration.COMB_REGISTRY_KEY).get().keySet()) {
+                        output.accept(CombItem.setComb(ItemsRegistration.COMB.get().getDefaultInstance(), id));
+                    }
+                    for (Map.Entry<ResourceKey<Species>, Species> entry : speciesSet) {
+                        output.accept(BeeNestBlock.stackNest(ItemsRegistration.BEE_NEST.get().getDefaultInstance(), entry.getValue()));
+                    }
                 }
             }).build());
 
     @Override
     public void onInitialize() {
         this.registerSerializers();
-        modEventBus.addListener(ColorHandlers::registerItemColorHandlers);
-        modEventBus.addListener(ColorHandlers::registerBlockColorHandlers);
+		this.registerRegistries();
         this.registerDatapackRegistries();
-//        modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(DataGenerators::generate);
+
+		// TODO: move to client mod init
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+			modEventBus.addListener(ColorHandlers::registerItemColorHandlers);
+			modEventBus.addListener(ColorHandlers::registerBlockColorHandlers);
+		}
 
         BlocksRegistration.register();
         ItemsRegistration.register();
@@ -141,7 +160,7 @@ public class ComplicatedBees implements ModInitializer {
         EntitiesRegistration.ENTITY_TYPE.register(modEventBus);
         EsotericRegistration.register();
 
-        context.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 
         CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -184,4 +203,16 @@ public class ComplicatedBees implements ModInitializer {
         LOGGER.info("Registered {} mutations", server.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} flowers", server.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
     }
+
+	// TODO: move to client mod init
+//	@SubscribeEvent
+//	public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+//		event.register(OptimizedBeeModelLoader.ID.getPath(), new OptimizedBeeModelLoader());
+//	}
+//
+//	@SubscribeEvent
+//	public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+//		event.registerSpriteSet(EsotericRegistration.BEE_PARTICLE.get(),
+//				BeeParticle.Provider::new);
+//	}
 }

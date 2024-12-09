@@ -20,7 +20,7 @@ public class BeeNestBlockEntity extends BlockEntity implements CustomDataPacketH
     private Species species;
 
     public BeeNestBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(BlockEntitiesRegistration.BEE_NEST_ENTITY.get(), pPos, pBlockState);
+        super(BlockEntitiesRegistration.BEE_NEST_ENTITY, pPos, pBlockState);
     }
 
     public static int getNestColor(BlockState state, BlockAndTintGetter level, BlockPos pos, int index) {

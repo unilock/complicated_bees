@@ -93,7 +93,7 @@ public class GeneratorBlockEntity extends BlockEntity {
 //    }
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntitiesRegistration.GENERATOR_BLOCK_ENTITY.get(), pos, state);
+        super(BlockEntitiesRegistration.GENERATOR_BLOCK_ENTITY, pos, state);
     }
 
     public void tickServer() {

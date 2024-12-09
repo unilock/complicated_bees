@@ -31,6 +31,6 @@ public class BeeStaffItem extends DisableableItem {
 
     @Override
     public boolean isValidRepairItem(ItemStack pStack, ItemStack pRepairCandidate) {
-        return pRepairCandidate.is(ItemsRegistration.ROYAL_JELLY.get());
+        return pRepairCandidate.is(ItemsRegistration.ROYAL_JELLY);
     }
 }

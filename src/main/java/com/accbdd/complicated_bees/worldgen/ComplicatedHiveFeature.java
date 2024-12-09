@@ -21,8 +21,8 @@ public class ComplicatedHiveFeature extends Feature<ComplicatedHiveFeatureConfig
         WorldGenLevel worldgenlevel = context.level();
         BlockPos blockpos = context.origin();
 
-        worldgenlevel.setBlock(blockpos, BlocksRegistration.BEE_NEST.get().defaultBlockState(), 2);
-        context.level().getBlockEntity(blockpos, BlockEntitiesRegistration.BEE_NEST_ENTITY.get()).ifPresent(be -> be.setSpecies(Species.getFromResourceLocation(ResourceLocation.tryParse(config.speciesKey()))));
+        worldgenlevel.setBlock(blockpos, BlocksRegistration.BEE_NEST.defaultBlockState(), 2);
+        context.level().getBlockEntity(blockpos, BlockEntitiesRegistration.BEE_NEST_ENTITY).ifPresent(be -> be.setSpecies(Species.getFromResourceLocation(ResourceLocation.tryParse(config.speciesKey()))));
 
         return true;
     }

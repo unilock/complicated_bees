@@ -27,12 +27,12 @@ public class ApiaryMenu extends AbstractContainerMenu {
     }
 
     public ApiaryMenu(int windowId, Player player, BlockPos pos, ContainerData data) {
-        super(MenuRegistration.APIARY_MENU.get(), windowId);
+        super(MenuRegistration.APIARY_MENU, windowId);
         this.data = data;
         this.pos = pos;
         if (player.level().getBlockEntity(pos) instanceof ApiaryBlockEntity apiary) {
             addSlot(new TagSlot(apiary.getBeeItems(), BEE_SLOT, 29, 38, ItemTagGenerator.ROYAL));
-            addSlot(new ItemSlot(apiary.getBeeItems(), BEE_SLOT + 1, 29, 63, ItemsRegistration.DRONE.get()));
+            addSlot(new ItemSlot(apiary.getBeeItems(), BEE_SLOT + 1, 29, 63, ItemsRegistration.DRONE));
 
             addSlot(new TagSlot(apiary.getFrameItems(), FRAME_SLOT, 65, 23, ItemTagGenerator.FRAME));
             addSlot(new TagSlot(apiary.getFrameItems(), FRAME_SLOT + 1, 65, 51, ItemTagGenerator.FRAME));
@@ -119,12 +119,12 @@ public class ApiaryMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, BlocksRegistration.APIARY.get());
+        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, BlocksRegistration.APIARY);
     }
 
     public boolean hasQueen() {
         ItemStack item = getSlot(0).getItem();
-        return item.getItem() == ItemsRegistration.QUEEN.get();
+        return item.getItem() == ItemsRegistration.QUEEN;
     }
 
     public int getScaledProgress(float progress, int maxProgress) {

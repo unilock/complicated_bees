@@ -23,7 +23,7 @@ public class AnalyzerMenu extends AbstractContainerMenu {
     private final ItemStackHandler handler;
 
     public AnalyzerMenu(int windowId, Player player, int bagSlot) {
-        super(MenuRegistration.ANALYZER_MENU.get(), windowId);
+        super(MenuRegistration.ANALYZER_MENU, windowId);
         this.bagSlot = bagSlot;
         this.handler = new ItemStackHandler(2) {
             @Override

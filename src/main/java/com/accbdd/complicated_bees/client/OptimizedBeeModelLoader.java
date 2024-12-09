@@ -122,9 +122,9 @@ public class OptimizedBeeModelLoader implements IGeometryLoader<OptimizedBeeMode
                 }
                 return new Variant(beeModels[0], beeModels[1], beeModels[2]);
             });
-            if (stack.is(ItemsRegistration.QUEEN.get())) {
+            if (stack.is(ItemsRegistration.QUEEN)) {
                 return cacheMap.get(species).queen;
-            } else if (stack.is(ItemsRegistration.PRINCESS.get()))
+            } else if (stack.is(ItemsRegistration.PRINCESS))
                 return cacheMap.get(species).princess;
             else
                 return cacheMap.get(species).drone;

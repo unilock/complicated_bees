@@ -23,7 +23,7 @@ public class InheritHiveCombFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType getType() {
-        return EsotericRegistration.INHERIT_COMB.get();
+        return EsotericRegistration.INHERIT_COMB;
     }
 
     @Override

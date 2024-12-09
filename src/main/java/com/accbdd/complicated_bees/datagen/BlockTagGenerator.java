@@ -23,46 +23,46 @@ public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
-        getOrCreateTagBuilder(SCOOPABLE).add(BlocksRegistration.BEE_NEST.get());
+        getOrCreateTagBuilder(SCOOPABLE).add(BlocksRegistration.BEE_NEST);
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE).add(
-                BlocksRegistration.APIARY.get(),
-                BlocksRegistration.HONEYED_PLANKS.get(),
-                BlocksRegistration.HONEYED_STAIRS.get(),
-                BlocksRegistration.HONEYED_SLAB.get(),
-                BlocksRegistration.HONEYED_FENCE.get(),
-                BlocksRegistration.HONEYED_FENCE_GATE.get(),
-                BlocksRegistration.HONEYED_BUTTON.get(),
-                BlocksRegistration.HONEYED_PRESSURE_PLATE.get(),
-                BlocksRegistration.HONEYED_DOOR.get(),
-                BlocksRegistration.HONEYED_TRAPDOOR.get()
+                BlocksRegistration.APIARY,
+                BlocksRegistration.HONEYED_PLANKS,
+                BlocksRegistration.HONEYED_STAIRS,
+                BlocksRegistration.HONEYED_SLAB,
+                BlocksRegistration.HONEYED_FENCE,
+                BlocksRegistration.HONEYED_FENCE_GATE,
+                BlocksRegistration.HONEYED_BUTTON,
+                BlocksRegistration.HONEYED_PRESSURE_PLATE,
+                BlocksRegistration.HONEYED_DOOR,
+                BlocksRegistration.HONEYED_TRAPDOOR
         );
         getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(
-                BlocksRegistration.CENTRIFUGE.get(),
-                BlocksRegistration.CHISELED_WAX.get(),
-                BlocksRegistration.WAX_BLOCK.get(),
-                BlocksRegistration.WAX_BLOCK_STAIRS.get(),
-                BlocksRegistration.WAX_BLOCK_SLAB.get(),
-                BlocksRegistration.WAX_BLOCK_WALL.get(),
-                BlocksRegistration.SMOOTH_WAX.get(),
-                BlocksRegistration.SMOOTH_WAX_STAIRS.get(),
-                BlocksRegistration.SMOOTH_WAX_SLAB.get(),
-                BlocksRegistration.SMOOTH_WAX_WALL.get(),
-                BlocksRegistration.WAX_BRICKS.get(),
-                BlocksRegistration.WAX_BRICK_STAIRS.get(),
-                BlocksRegistration.WAX_BRICK_SLAB.get(),
-                BlocksRegistration.WAX_BRICK_WALL.get(),
-                BlocksRegistration.CHISELED_WAX.get()
+                BlocksRegistration.CENTRIFUGE,
+                BlocksRegistration.CHISELED_WAX,
+                BlocksRegistration.WAX_BLOCK,
+                BlocksRegistration.WAX_BLOCK_STAIRS,
+                BlocksRegistration.WAX_BLOCK_SLAB,
+                BlocksRegistration.WAX_BLOCK_WALL,
+                BlocksRegistration.SMOOTH_WAX,
+                BlocksRegistration.SMOOTH_WAX_STAIRS,
+                BlocksRegistration.SMOOTH_WAX_SLAB,
+                BlocksRegistration.SMOOTH_WAX_WALL,
+                BlocksRegistration.WAX_BRICKS,
+                BlocksRegistration.WAX_BRICK_STAIRS,
+                BlocksRegistration.WAX_BRICK_SLAB,
+                BlocksRegistration.WAX_BRICK_WALL,
+                BlocksRegistration.CHISELED_WAX
         );
         getOrCreateTagBuilder(BlockTags.WALLS).add(
-                BlocksRegistration.WAX_BLOCK_WALL.get(),
-                BlocksRegistration.SMOOTH_WAX_WALL.get(),
-                BlocksRegistration.WAX_BRICK_WALL.get()
+                BlocksRegistration.WAX_BLOCK_WALL,
+                BlocksRegistration.SMOOTH_WAX_WALL,
+                BlocksRegistration.WAX_BRICK_WALL
         );
         getOrCreateTagBuilder(BlockTags.FENCES).add(
-                BlocksRegistration.HONEYED_FENCE.get()
+                BlocksRegistration.HONEYED_FENCE
         );
         getOrCreateTagBuilder(BlockTags.FENCE_GATES).add(
-                BlocksRegistration.HONEYED_FENCE_GATE.get()
+                BlocksRegistration.HONEYED_FENCE_GATE
         );
     }
 }

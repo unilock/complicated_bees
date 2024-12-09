@@ -29,23 +29,23 @@ public class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider pProvider) {
-        getOrCreateTagBuilder(SCOOP_TOOL).add(ItemsRegistration.SCOOP.get());
-        getOrCreateTagBuilder(ROYAL).add(ItemsRegistration.PRINCESS.get(), ItemsRegistration.QUEEN.get());
-        getOrCreateTagBuilder(BEE).add(ItemsRegistration.PRINCESS.get(), ItemsRegistration.QUEEN.get(), ItemsRegistration.DRONE.get());
-        getOrCreateTagBuilder(ANALYZER_FUEL).add(ItemsRegistration.HONEY_DROPLET.get(), ItemsRegistration.ROYAL_JELLY.get());
+        getOrCreateTagBuilder(SCOOP_TOOL).add(ItemsRegistration.SCOOP);
+        getOrCreateTagBuilder(ROYAL).add(ItemsRegistration.PRINCESS, ItemsRegistration.QUEEN);
+        getOrCreateTagBuilder(BEE).add(ItemsRegistration.PRINCESS, ItemsRegistration.QUEEN, ItemsRegistration.DRONE);
+        getOrCreateTagBuilder(ANALYZER_FUEL).add(ItemsRegistration.HONEY_DROPLET, ItemsRegistration.ROYAL_JELLY);
         getOrCreateTagBuilder(FRAME).add(
-                ItemsRegistration.FRAME.get(),
-                ItemsRegistration.DEADLY_FRAME.get(),
-                ItemsRegistration.DRY_FRAME.get(),
-                ItemsRegistration.WET_FRAME.get(),
-                ItemsRegistration.COLD_FRAME.get(),
-                ItemsRegistration.HOT_FRAME.get(),
-                ItemsRegistration.RESTRICTIVE_FRAME.get(),
-                ItemsRegistration.WAXED_FRAME.get(),
-                ItemsRegistration.HONEYED_FRAME.get(),
-                ItemsRegistration.TWISTING_FRAME.get(),
-                ItemsRegistration.SOOTHING_FRAME.get()
+                ItemsRegistration.FRAME,
+                ItemsRegistration.DEADLY_FRAME,
+                ItemsRegistration.DRY_FRAME,
+                ItemsRegistration.WET_FRAME,
+                ItemsRegistration.COLD_FRAME,
+                ItemsRegistration.HOT_FRAME,
+                ItemsRegistration.RESTRICTIVE_FRAME,
+                ItemsRegistration.WAXED_FRAME,
+                ItemsRegistration.HONEYED_FRAME,
+                ItemsRegistration.TWISTING_FRAME,
+                ItemsRegistration.SOOTHING_FRAME
         );
-        getOrCreateTagBuilder(ItemTags.PLANKS).add(ItemsRegistration.HONEYED_PLANKS.get());
+        getOrCreateTagBuilder(ItemTags.PLANKS).add(ItemsRegistration.HONEYED_PLANKS);
     }
 }

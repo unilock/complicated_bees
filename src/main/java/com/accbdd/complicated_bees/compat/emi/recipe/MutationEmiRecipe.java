@@ -39,12 +39,12 @@ public class MutationEmiRecipe implements EmiRecipe {
                 "/result/" +
                 mutation.getResult().toString().replace(":", "/")
         );
-        first = EmiStack.of(mutation.getFirstSpecies().toStack(ItemsRegistration.QUEEN.get()));
-        second = EmiStack.of(mutation.getSecondSpecies().toStack(ItemsRegistration.QUEEN.get()));
-        result = EmiStack.of(mutation.getResultSpecies().toStack(ItemsRegistration.QUEEN.get())).setChance(mutation.getChance());
+        first = EmiStack.of(mutation.getFirstSpecies().toStack(ItemsRegistration.QUEEN));
+        second = EmiStack.of(mutation.getSecondSpecies().toStack(ItemsRegistration.QUEEN));
+        result = EmiStack.of(mutation.getResultSpecies().toStack(ItemsRegistration.QUEEN)).setChance(mutation.getChance());
         extraResults = new ArrayList<>(List.of(result));
-        extraResults.add(EmiStack.of(mutation.getResultSpecies().toStack(ItemsRegistration.PRINCESS.get())));
-        extraResults.add(EmiStack.of(mutation.getResultSpecies().toStack(ItemsRegistration.DRONE.get())));
+        extraResults.add(EmiStack.of(mutation.getResultSpecies().toStack(ItemsRegistration.PRINCESS)));
+        extraResults.add(EmiStack.of(mutation.getResultSpecies().toStack(ItemsRegistration.DRONE)));
         catalysts = new ArrayList<>(List.of(ComplicatedBeesEMI.APIARY));
         catalysts.addAll(mutation.getFirstSpecies().toMembers().stream().map(EmiStack::of).toList());
         catalysts.addAll(mutation.getSecondSpecies().toMembers().stream().map(EmiStack::of).toList());

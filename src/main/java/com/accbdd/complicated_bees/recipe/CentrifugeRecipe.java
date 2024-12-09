@@ -131,7 +131,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
 
     @Override
     public RecipeType<?> getType() {
-        return EsotericRegistration.CENTRIFUGE_RECIPE.get();
+        return EsotericRegistration.CENTRIFUGE_RECIPE;
     }
 
 

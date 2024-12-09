@@ -150,7 +150,7 @@ public class ApiaryBlockEntity extends BlockEntity {
 //    }
 
     public ApiaryBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(BlockEntitiesRegistration.APIARY_ENTITY.get(), pPos, pBlockState);
+        super(BlockEntitiesRegistration.APIARY_ENTITY, pPos, pBlockState);
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
@@ -377,7 +377,7 @@ public class ApiaryBlockEntity extends BlockEntity {
     }
 
     private ItemStack createQueenFromPrincessAndDrone(ItemStack princess, ItemStack drone) {
-        ItemStack queen = new ItemStack(ItemsRegistration.QUEEN.get());
+        ItemStack queen = new ItemStack(ItemsRegistration.QUEEN);
         GeneticHelper.setGenome(queen, GeneticHelper.getGenome(princess));
         GeneticHelper.setMate(queen, GeneticHelper.getGenome(drone));
         QueenItem.setGeneration(queen, PrincessItem.getGeneration(princess));
@@ -481,9 +481,9 @@ public class ApiaryBlockEntity extends BlockEntity {
         if (BeeItem.getAge(queen) >= ((EnumLifespan) GeneticHelper.getGeneValue(queen, GeneLifespan.ID, true)).value) {
             errorState = 0;
             float mutationMod = getFrameModifiers().stream().map(BeeHousingModifier::getMutationMod).reduce(1f, (a, b) -> a * b);
-            outputBuffer.add(GeneticHelper.getOffspring(queen, ItemsRegistration.PRINCESS.get(), getLevel(), getBlockPos(), mutationMod));
+            outputBuffer.add(GeneticHelper.getOffspring(queen, ItemsRegistration.PRINCESS, getLevel(), getBlockPos(), mutationMod));
             for (int i = 0; i < (int) GeneticHelper.getGeneValue(queen, GeneFertility.ID, true); i++) {
-                outputBuffer.add(GeneticHelper.getOffspring(queen, ItemsRegistration.DRONE.get(), getLevel(), getBlockPos(), mutationMod));
+                outputBuffer.add(GeneticHelper.getOffspring(queen, ItemsRegistration.DRONE, getLevel(), getBlockPos(), mutationMod));
             }
             TransferUtilExtras.extractAnySlot(beeItems, BEE_SLOT, 1);
             setChanged();
@@ -576,7 +576,7 @@ public class ApiaryBlockEntity extends BlockEntity {
         }
         int[] searchRadii = (int[]) GeneticHelper.getGeneValue(bee, GeneTerritory.ID, true);
         BlockPosBoxIterator it = new BlockPosBoxIterator(this.getBlockPos(), Math.round(searchRadii[0] * rangeModifier), Math.round(searchRadii[1] * rangeModifier));
-        while (it.hasNext() && this.beeItems.getStackInSlot(0).is(ItemsRegistration.QUEEN.get())) {
+        while (it.hasNext() && this.beeItems.getStackInSlot(0).is(ItemsRegistration.QUEEN)) {
             BlockPos pos = it.next();
             if (flower.isAcceptable(getLevel().getBlockState(pos))) {
                 flowerCache.add(pos);

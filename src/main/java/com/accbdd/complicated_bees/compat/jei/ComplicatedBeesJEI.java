@@ -45,7 +45,7 @@ public class ComplicatedBeesJEI implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager manager = Minecraft.getInstance().getConnection().getRecipeManager();
         ComplicatedBees.LOGGER.debug("registering recipes for JEI");
-        registration.addRecipes(CentrifugeRecipeCategory.TYPE, manager.getAllRecipesFor(EsotericRegistration.CENTRIFUGE_RECIPE.get()).stream().toList());
+        registration.addRecipes(CentrifugeRecipeCategory.TYPE, manager.getAllRecipesFor(EsotericRegistration.CENTRIFUGE_RECIPE).stream().toList());
         registration.addRecipes(BeeProduceRecipeCategory.TYPE, Minecraft.getInstance().getConnection().registryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().stream().toList());
         registration.addRecipes(MutationRecipeCategory.TYPE, Minecraft.getInstance().getConnection().registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList());
     }
@@ -69,18 +69,18 @@ public class ComplicatedBeesJEI implements IModPlugin {
 
         IIngredientSubtypeInterpreter<ItemStack> nestInterpreter = (stack, context) -> stack.getOrCreateTag().getCompound("BlockEntityTag").getString("species");
 
-        registration.registerSubtypeInterpreter(ItemsRegistration.DRONE.get(), speciesInterpreter);
-        registration.registerSubtypeInterpreter(ItemsRegistration.QUEEN.get(), speciesInterpreter);
-        registration.registerSubtypeInterpreter(ItemsRegistration.PRINCESS.get(), speciesInterpreter);
-        registration.registerSubtypeInterpreter(ItemsRegistration.COMB.get(), combInterpreter);
-        registration.registerSubtypeInterpreter(ItemsRegistration.BEE_NEST.get(), nestInterpreter);
+        registration.registerSubtypeInterpreter(ItemsRegistration.DRONE, speciesInterpreter);
+        registration.registerSubtypeInterpreter(ItemsRegistration.QUEEN, speciesInterpreter);
+        registration.registerSubtypeInterpreter(ItemsRegistration.PRINCESS, speciesInterpreter);
+        registration.registerSubtypeInterpreter(ItemsRegistration.COMB, combInterpreter);
+        registration.registerSubtypeInterpreter(ItemsRegistration.BEE_NEST, nestInterpreter);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(ItemsRegistration.APIARY.get().getDefaultInstance(), BeeProduceRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(ItemsRegistration.APIARY.get().getDefaultInstance(), MutationRecipeCategory.TYPE);
-        registration.addRecipeCatalyst(ItemsRegistration.CENTRIFUGE.get().getDefaultInstance(), CentrifugeRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(ItemsRegistration.APIARY.getDefaultInstance(), BeeProduceRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(ItemsRegistration.APIARY.getDefaultInstance(), MutationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(ItemsRegistration.CENTRIFUGE.getDefaultInstance(), CentrifugeRecipeCategory.TYPE);
     }
 
     public static IDrawable createDrawable(ResourceLocation location, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight) {

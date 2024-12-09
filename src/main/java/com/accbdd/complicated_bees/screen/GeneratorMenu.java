@@ -25,7 +25,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
     private int maxBurnTime;
 
     public GeneratorMenu(int windowId, Player player, BlockPos pos) {
-        super(MenuRegistration.GENERATOR_MENU.get(), windowId);
+        super(MenuRegistration.GENERATOR_MENU, windowId);
         this.pos = pos;
         if (player.level().getBlockEntity(pos) instanceof GeneratorBlockEntity generator) {
             addSlot(new SlotItemHandler(generator.getItems(), SLOT, 80, 31));
@@ -154,6 +154,6 @@ public class GeneratorMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, BlocksRegistration.GENERATOR.get());
+        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, BlocksRegistration.GENERATOR);
     }
 }

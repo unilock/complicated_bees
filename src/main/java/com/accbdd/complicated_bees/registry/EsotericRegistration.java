@@ -15,28 +15,26 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
-import java.util.function.Supplier;
-
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
 public class EsotericRegistration {
-    public static final Supplier<SimpleParticleType> BEE_PARTICLE = () -> Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(MODID, "bee"),
+    public static final SimpleParticleType BEE_PARTICLE = Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(MODID, "bee"),
             new SimpleParticleType(true));
 
-    public static final Supplier<LootItemFunctionType> INHERIT_HIVE = () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(MODID, "inherit_hive_species"),
+    public static final LootItemFunctionType INHERIT_HIVE = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(MODID, "inherit_hive_species"),
             new LootItemFunctionType(InheritHiveSpeciesFunction.Serializer.INSTANCE));
-    public static final Supplier<LootItemFunctionType> INHERIT_COMB = () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(MODID, "inherit_hive_comb"),
+    public static final LootItemFunctionType INHERIT_COMB = Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, new ResourceLocation(MODID, "inherit_hive_comb"),
             new LootItemFunctionType(InheritHiveCombFunction.Serializer.INSTANCE));
 
-    public static final Supplier<TreeDecoratorType<ComplicatedBeenestDecorator>> COMPLICATED_BEENEST_DECORATOR = () -> Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, new ResourceLocation(MODID, "bee_nest_decorator"),
+    public static final TreeDecoratorType<ComplicatedBeenestDecorator> COMPLICATED_BEENEST_DECORATOR = Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE, new ResourceLocation(MODID, "bee_nest_decorator"),
             new TreeDecoratorType<>(ComplicatedBeenestDecorator.CODEC));
 
-    public static final Supplier<ComplicatedHiveFeature> COMPLICATED_HIVE_FEATURE = () -> Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(MODID, "complicated_bee_nest"),
+    public static final ComplicatedHiveFeature COMPLICATED_HIVE_FEATURE = Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(MODID, "complicated_bee_nest"),
             new ComplicatedHiveFeature(ComplicatedHiveFeatureConfiguration.CODEC));
 
-    public static final Supplier<RecipeType<CentrifugeRecipe>> CENTRIFUGE_RECIPE = () -> RecipeType.register(new ResourceLocation(MODID, "centrifuge").toString());
+    public static final RecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE = RecipeType.register(new ResourceLocation(MODID, "centrifuge").toString());
 
-    public static final Supplier<RecipeSerializer<CentrifugeRecipe>> CENTRIFUGE_RECIPE_SERIALIZER = () -> Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, new ResourceLocation(MODID, "centrifuge"),
+    public static final RecipeSerializer<CentrifugeRecipe> CENTRIFUGE_RECIPE_SERIALIZER = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, new ResourceLocation(MODID, "centrifuge"),
             CentrifugeRecipe.SERIALIZER);
 
     public static void register() {}

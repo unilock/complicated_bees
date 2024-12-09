@@ -10,18 +10,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 
-import java.util.function.Supplier;
-
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
 
 public class MenuRegistration {
-    public static final Supplier<MenuType<CentrifugeMenu>> CENTRIFUGE_MENU = () -> Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "centrifuge"),
+    public static final MenuType<CentrifugeMenu> CENTRIFUGE_MENU = Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "centrifuge"),
             new ExtendedScreenHandlerType<>((windowId, inv, data) -> new CentrifugeMenu(windowId, inv.player, data.readBlockPos())));
-    public static final Supplier<MenuType<ApiaryMenu>> APIARY_MENU = () -> Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "apiary"),
+    public static final MenuType<ApiaryMenu> APIARY_MENU = Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "apiary"),
             new ExtendedScreenHandlerType<>((windowId, inv, data) -> new ApiaryMenu(windowId, inv.player, data.readBlockPos())));
-    public static final Supplier<MenuType<GeneratorMenu>> GENERATOR_MENU = () -> Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "generator"),
+    public static final MenuType<GeneratorMenu> GENERATOR_MENU = Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "generator"),
             new ExtendedScreenHandlerType<>(((windowId, inv, data) -> new GeneratorMenu(windowId, inv.player, data.readBlockPos()))));
-    public static final Supplier<MenuType<AnalyzerMenu>> ANALYZER_MENU = () -> Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "analyzer"),
+    public static final MenuType<AnalyzerMenu> ANALYZER_MENU = Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "analyzer"),
             new ExtendedScreenHandlerType<>((windowId, playerInv, data) -> AnalyzerMenu.fromNetwork(windowId, playerInv)));
 
     public static void register() {}

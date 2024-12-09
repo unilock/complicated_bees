@@ -120,8 +120,8 @@ public class CentrifugeBlockEntity extends BlockEntity {
 //    }
 
     public CentrifugeBlockEntity(BlockPos pos, BlockState blockState) {
-        super(BlockEntitiesRegistration.CENTRIFUGE_ENTITY.get(), pos, blockState);
-        this.quickCheck = RecipeManager.createCheck(EsotericRegistration.CENTRIFUGE_RECIPE.get());
+        super(BlockEntitiesRegistration.CENTRIFUGE_ENTITY, pos, blockState);
+        this.quickCheck = RecipeManager.createCheck(EsotericRegistration.CENTRIFUGE_RECIPE);
         this.data = new ContainerData() {
             @Override
             public int get(int index) {

@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class BeeNestBlockItem extends BlockItem {
     public BeeNestBlockItem(Properties prop) {
-        super(BlocksRegistration.BEE_NEST.get(), prop);
+        super(BlocksRegistration.BEE_NEST, prop);
     }
 
     @Override

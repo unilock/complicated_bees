@@ -26,7 +26,7 @@ public class InheritHiveSpeciesFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType getType() {
-        return EsotericRegistration.INHERIT_HIVE.get();
+        return EsotericRegistration.INHERIT_HIVE;
     }
 
     @Override

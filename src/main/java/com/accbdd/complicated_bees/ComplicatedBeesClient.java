@@ -24,12 +24,12 @@ import java.util.Map;
 public class ComplicatedBeesClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.register(EntitiesRegistration.BEE_STAFF_MOUNT.get(), (context) -> new ThrownItemRenderer<>(context, 1.0f, true));
+        EntityRendererRegistry.register(EntitiesRegistration.BEE_STAFF_MOUNT, (context) -> new ThrownItemRenderer<>(context, 1.0f, true));
 
-        MenuScreens.register(MenuRegistration.CENTRIFUGE_MENU.get(), CentrifugeScreen::new);
-        MenuScreens.register(MenuRegistration.APIARY_MENU.get(), ApiaryScreen::new);
-        MenuScreens.register(MenuRegistration.GENERATOR_MENU.get(), GeneratorScreen::new);
-        MenuScreens.register(MenuRegistration.ANALYZER_MENU.get(), AnalyzerScreen::new);
+        MenuScreens.register(MenuRegistration.CENTRIFUGE_MENU, CentrifugeScreen::new);
+        MenuScreens.register(MenuRegistration.APIARY_MENU, ApiaryScreen::new);
+        MenuScreens.register(MenuRegistration.GENERATOR_MENU, GeneratorScreen::new);
+        MenuScreens.register(MenuRegistration.ANALYZER_MENU, AnalyzerScreen::new);
 
         ColorHandlers.registerItemColorHandlers();
         ColorHandlers.registerBlockColorHandlers();
@@ -44,7 +44,7 @@ public class ComplicatedBeesClient implements ClientModInitializer {
     }
 
     public static void registerParticleProviders() {
-        ParticleFactoryRegistry.getInstance().register(EsotericRegistration.BEE_PARTICLE.get(),
+        ParticleFactoryRegistry.getInstance().register(EsotericRegistration.BEE_PARTICLE,
                 BeeParticle.Provider::new);
     }
 }

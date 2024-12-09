@@ -59,12 +59,12 @@ public class ScoopItem extends DiggerItem {
         if (!pLevel.isClientSide && !pState.is(BlockTags.FIRE)) {
             pStack.hurtAndBreak(1, pMiningEntity, (entity) -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         }
-        return pState.is(BlocksRegistration.BEE_NEST.get());
+        return pState.is(BlocksRegistration.BEE_NEST);
     }
 
     @Override
     public boolean isCorrectToolForDrops(BlockState pBlock) {
-        if (pBlock.is(BlocksRegistration.BEE_NEST.get())) {
+        if (pBlock.is(BlocksRegistration.BEE_NEST)) {
             return true;
         }
         return super.isCorrectToolForDrops(pBlock);

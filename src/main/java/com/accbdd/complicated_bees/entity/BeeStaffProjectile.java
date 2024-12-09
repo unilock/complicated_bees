@@ -32,7 +32,7 @@ public class BeeStaffProjectile extends Projectile implements ItemSupplier {
     }
 
     public BeeStaffProjectile(Level level, double x, double y, double z, double speedX, double speedY, double speedZ) {
-        this(EntitiesRegistration.BEE_STAFF_MOUNT.get(), level);
+        this(EntitiesRegistration.BEE_STAFF_MOUNT, level);
         this.moveTo(x, y, z, this.getYRot(), this.getXRot());
         this.reapplyPosition();
         this.speedX = speedX;
@@ -69,8 +69,8 @@ public class BeeStaffProjectile extends Projectile implements ItemSupplier {
             if (this.isInWater())
                 this.discard();
             this.setDeltaMovement(vec3.add(this.speedX, this.speedY, this.speedZ));
-            this.level().addParticle(EsotericRegistration.BEE_PARTICLE.get(), dX, dY, dZ, 0.0, 0.0, 0.0);
-            this.level().addParticle(EsotericRegistration.BEE_PARTICLE.get(), dX, dY, dZ, 0.0, 0.0, 0.0);
+            this.level().addParticle(EsotericRegistration.BEE_PARTICLE, dX, dY, dZ, 0.0, 0.0, 0.0);
+            this.level().addParticle(EsotericRegistration.BEE_PARTICLE, dX, dY, dZ, 0.0, 0.0, 0.0);
             this.setPos(dX, dY, dZ);
         } else {
             this.discard();

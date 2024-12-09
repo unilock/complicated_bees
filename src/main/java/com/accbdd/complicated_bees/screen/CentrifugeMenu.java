@@ -24,7 +24,7 @@ public class CentrifugeMenu extends AbstractContainerMenu {
     }
 
     public CentrifugeMenu(int windowId, Player player, BlockPos pos, ContainerData data) {
-        super(MenuRegistration.CENTRIFUGE_MENU.get(), windowId);
+        super(MenuRegistration.CENTRIFUGE_MENU, windowId);
         this.data = data;
         this.pos = pos;
         if (player.level().getBlockEntity(pos) instanceof CentrifugeBlockEntity centrifuge) {
@@ -149,6 +149,6 @@ public class CentrifugeMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, BlocksRegistration.CENTRIFUGE.get());
+        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, BlocksRegistration.CENTRIFUGE);
     }
 }

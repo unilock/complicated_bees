@@ -7,34 +7,34 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.data.BlockFamily;
 
 public class DataGenerators implements DataGeneratorEntrypoint {
-    public static final BlockFamily HONEYED_PLANK_FAMILY = new BlockFamily.Builder(BlocksRegistration.HONEYED_PLANKS.get())
-            .stairs(BlocksRegistration.HONEYED_STAIRS.get())
-            .slab(BlocksRegistration.HONEYED_SLAB.get())
-            .fence(BlocksRegistration.HONEYED_FENCE.get())
-            .fenceGate(BlocksRegistration.HONEYED_FENCE_GATE.get())
-            .button(BlocksRegistration.HONEYED_BUTTON.get())
-            .pressurePlate(BlocksRegistration.HONEYED_PRESSURE_PLATE.get())
-            .door(BlocksRegistration.HONEYED_DOOR.get())
-            .trapdoor(BlocksRegistration.HONEYED_TRAPDOOR.get())
+    public static final BlockFamily HONEYED_PLANK_FAMILY = new BlockFamily.Builder(BlocksRegistration.HONEYED_PLANKS)
+            .stairs(BlocksRegistration.HONEYED_STAIRS)
+            .slab(BlocksRegistration.HONEYED_SLAB)
+            .fence(BlocksRegistration.HONEYED_FENCE)
+            .fenceGate(BlocksRegistration.HONEYED_FENCE_GATE)
+            .button(BlocksRegistration.HONEYED_BUTTON)
+            .pressurePlate(BlocksRegistration.HONEYED_PRESSURE_PLATE)
+            .door(BlocksRegistration.HONEYED_DOOR)
+            .trapdoor(BlocksRegistration.HONEYED_TRAPDOOR)
             .getFamily();
 
-    public static final BlockFamily WAX_BLOCK_FAMILY = new BlockFamily.Builder(BlocksRegistration.WAX_BLOCK.get())
-            .stairs(BlocksRegistration.WAX_BLOCK_STAIRS.get())
-            .slab(BlocksRegistration.WAX_BLOCK_SLAB.get())
-            .wall(BlocksRegistration.WAX_BLOCK_WALL.get())
+    public static final BlockFamily WAX_BLOCK_FAMILY = new BlockFamily.Builder(BlocksRegistration.WAX_BLOCK)
+            .stairs(BlocksRegistration.WAX_BLOCK_STAIRS)
+            .slab(BlocksRegistration.WAX_BLOCK_SLAB)
+            .wall(BlocksRegistration.WAX_BLOCK_WALL)
             .getFamily();
 
-    public static final BlockFamily WAX_BRICK_FAMILY = new BlockFamily.Builder(BlocksRegistration.WAX_BRICKS.get())
-            .stairs(BlocksRegistration.WAX_BRICK_STAIRS.get())
-            .slab(BlocksRegistration.WAX_BRICK_SLAB.get())
-            .wall(BlocksRegistration.WAX_BRICK_WALL.get())
+    public static final BlockFamily WAX_BRICK_FAMILY = new BlockFamily.Builder(BlocksRegistration.WAX_BRICKS)
+            .stairs(BlocksRegistration.WAX_BRICK_STAIRS)
+            .slab(BlocksRegistration.WAX_BRICK_SLAB)
+            .wall(BlocksRegistration.WAX_BRICK_WALL)
             .getFamily();
 
-    public static final BlockFamily SMOOTH_WAX_FAMILY = new BlockFamily.Builder(BlocksRegistration.SMOOTH_WAX.get())
-            .stairs(BlocksRegistration.SMOOTH_WAX_STAIRS.get())
-            .slab(BlocksRegistration.SMOOTH_WAX_SLAB.get())
-            .wall(BlocksRegistration.SMOOTH_WAX_WALL.get())
-            .chiseled(BlocksRegistration.CHISELED_WAX.get())
+    public static final BlockFamily SMOOTH_WAX_FAMILY = new BlockFamily.Builder(BlocksRegistration.SMOOTH_WAX)
+            .stairs(BlocksRegistration.SMOOTH_WAX_STAIRS)
+            .slab(BlocksRegistration.SMOOTH_WAX_SLAB)
+            .wall(BlocksRegistration.SMOOTH_WAX_WALL)
+            .chiseled(BlocksRegistration.CHISELED_WAX)
             .getFamily();
 
 //    public static void generate(GatherDataEvent event) {

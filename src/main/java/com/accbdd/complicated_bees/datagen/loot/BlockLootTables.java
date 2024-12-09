@@ -26,32 +26,32 @@ public class BlockLootTables extends FabricBlockLootTableProvider {
 
     @Override
     public void generate() {
-        dropSelf(BlocksRegistration.APIARY.get());
-        dropSelf(BlocksRegistration.CENTRIFUGE.get());
-        dropSelf(BlocksRegistration.GENERATOR.get());
-        this.add(BlocksRegistration.BEE_NEST.get(), nestLootTable(BlocksRegistration.BEE_NEST.get()));
-        dropSelf(BlocksRegistration.WAX_BLOCK.get());
-        dropSelf(BlocksRegistration.WAX_BLOCK_STAIRS.get());
-        this.add(BlocksRegistration.WAX_BLOCK_SLAB.get(), createSlabItemTable(BlocksRegistration.WAX_BLOCK_SLAB.get()));
-        dropSelf(BlocksRegistration.WAX_BLOCK_WALL.get());
-        dropSelf(BlocksRegistration.SMOOTH_WAX.get());
-        dropSelf(BlocksRegistration.SMOOTH_WAX_STAIRS.get());
-        this.add(BlocksRegistration.SMOOTH_WAX_SLAB.get(), createSlabItemTable(BlocksRegistration.SMOOTH_WAX_SLAB.get()));
-        dropSelf(BlocksRegistration.SMOOTH_WAX_WALL.get());
-        dropSelf(BlocksRegistration.WAX_BRICKS.get());
-        dropSelf(BlocksRegistration.WAX_BRICK_STAIRS.get());
-        this.add(BlocksRegistration.WAX_BRICK_SLAB.get(), createSlabItemTable(BlocksRegistration.WAX_BRICK_SLAB.get()));
-        dropSelf(BlocksRegistration.WAX_BRICK_WALL.get());
-        dropSelf(BlocksRegistration.CHISELED_WAX.get());
-        dropSelf(BlocksRegistration.HONEYED_PLANKS.get());
-        dropSelf(BlocksRegistration.HONEYED_STAIRS.get());
-        this.add(BlocksRegistration.HONEYED_SLAB.get(), createSlabItemTable(BlocksRegistration.HONEYED_SLAB.get()));
-        dropSelf(BlocksRegistration.HONEYED_FENCE.get());
-        dropSelf(BlocksRegistration.HONEYED_FENCE_GATE.get());
-        dropSelf(BlocksRegistration.HONEYED_BUTTON.get());
-        dropSelf(BlocksRegistration.HONEYED_PRESSURE_PLATE.get());
-        this.add(BlocksRegistration.HONEYED_DOOR.get(), createDoorTable(BlocksRegistration.HONEYED_DOOR.get()));
-        dropSelf(BlocksRegistration.HONEYED_TRAPDOOR.get());
+        dropSelf(BlocksRegistration.APIARY);
+        dropSelf(BlocksRegistration.CENTRIFUGE);
+        dropSelf(BlocksRegistration.GENERATOR);
+        this.add(BlocksRegistration.BEE_NEST, nestLootTable(BlocksRegistration.BEE_NEST));
+        dropSelf(BlocksRegistration.WAX_BLOCK);
+        dropSelf(BlocksRegistration.WAX_BLOCK_STAIRS);
+        this.add(BlocksRegistration.WAX_BLOCK_SLAB, createSlabItemTable(BlocksRegistration.WAX_BLOCK_SLAB));
+        dropSelf(BlocksRegistration.WAX_BLOCK_WALL);
+        dropSelf(BlocksRegistration.SMOOTH_WAX);
+        dropSelf(BlocksRegistration.SMOOTH_WAX_STAIRS);
+        this.add(BlocksRegistration.SMOOTH_WAX_SLAB, createSlabItemTable(BlocksRegistration.SMOOTH_WAX_SLAB));
+        dropSelf(BlocksRegistration.SMOOTH_WAX_WALL);
+        dropSelf(BlocksRegistration.WAX_BRICKS);
+        dropSelf(BlocksRegistration.WAX_BRICK_STAIRS);
+        this.add(BlocksRegistration.WAX_BRICK_SLAB, createSlabItemTable(BlocksRegistration.WAX_BRICK_SLAB));
+        dropSelf(BlocksRegistration.WAX_BRICK_WALL);
+        dropSelf(BlocksRegistration.CHISELED_WAX);
+        dropSelf(BlocksRegistration.HONEYED_PLANKS);
+        dropSelf(BlocksRegistration.HONEYED_STAIRS);
+        this.add(BlocksRegistration.HONEYED_SLAB, createSlabItemTable(BlocksRegistration.HONEYED_SLAB));
+        dropSelf(BlocksRegistration.HONEYED_FENCE);
+        dropSelf(BlocksRegistration.HONEYED_FENCE_GATE);
+        dropSelf(BlocksRegistration.HONEYED_BUTTON);
+        dropSelf(BlocksRegistration.HONEYED_PRESSURE_PLATE);
+        this.add(BlocksRegistration.HONEYED_DOOR, createDoorTable(BlocksRegistration.HONEYED_DOOR));
+        dropSelf(BlocksRegistration.HONEYED_TRAPDOOR);
     }
 
 //    @Override
@@ -77,13 +77,13 @@ public class BlockLootTables extends FabricBlockLootTableProvider {
                         .when(HAS_NO_SILK_TOUCH)
                         .setRolls(ConstantValue.exactly(1.0f))
                         .add(
-                                LootItem.lootTableItem(ItemsRegistration.PRINCESS.get()).apply(InheritHiveSpeciesFunction.set())
+                                LootItem.lootTableItem(ItemsRegistration.PRINCESS).apply(InheritHiveSpeciesFunction.set())
                         ))
                 .withPool(LootPool.lootPool()
                         .when(HAS_NO_SILK_TOUCH)
                         .setRolls(ConstantValue.exactly(1.0f))
                         .add(
-                                LootItem.lootTableItem(ItemsRegistration.DRONE.get())
+                                LootItem.lootTableItem(ItemsRegistration.DRONE)
                                         .apply(InheritHiveSpeciesFunction.set())
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 1))
@@ -92,7 +92,7 @@ public class BlockLootTables extends FabricBlockLootTableProvider {
                         .when(HAS_NO_SILK_TOUCH)
                         .setRolls(BinomialDistributionGenerator.binomial(1, 0.35f))
                         .add(
-                                LootItem.lootTableItem(ItemsRegistration.COMB.get())
+                                LootItem.lootTableItem(ItemsRegistration.COMB)
                                         .apply(InheritHiveCombFunction.set())
                                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f)))
                                         .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 1))

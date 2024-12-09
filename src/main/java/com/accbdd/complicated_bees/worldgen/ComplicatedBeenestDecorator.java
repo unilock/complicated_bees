@@ -49,7 +49,7 @@ public class ComplicatedBeenestDecorator extends TreeDecorator {
 
     @Override
     protected TreeDecoratorType<?> type() {
-        return EsotericRegistration.COMPLICATED_BEENEST_DECORATOR.get();
+        return EsotericRegistration.COMPLICATED_BEENEST_DECORATOR;
     }
 
     @Override
@@ -71,8 +71,8 @@ public class ComplicatedBeenestDecorator extends TreeDecorator {
                         .filter(context::isAir)
                         .findFirst();
                 if (optional.isPresent()) {
-                    context.setBlock(optional.get(), BlocksRegistration.BEE_NEST.get().defaultBlockState());
-                    context.level().getBlockEntity(optional.get(), BlockEntitiesRegistration.BEE_NEST_ENTITY.get()).ifPresent(
+                    context.setBlock(optional.get(), BlocksRegistration.BEE_NEST.defaultBlockState());
+                    context.level().getBlockEntity(optional.get(), BlockEntitiesRegistration.BEE_NEST_ENTITY).ifPresent(
                             be -> be.setSpecies(Species.getFromResourceLocation(ResourceLocation.tryParse(this.speciesKey))));
                 }
             }

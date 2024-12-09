@@ -74,7 +74,7 @@ public class BeeNestBlock extends BaseEntityBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        ItemStack nest = new ItemStack(ItemsRegistration.BEE_NEST.get());
+        ItemStack nest = new ItemStack(ItemsRegistration.BEE_NEST);
         CompoundTag tag = nest.getOrCreateTag();
         CompoundTag data = new CompoundTag();
         BlockEntity be = level.getBlockEntity(pos);

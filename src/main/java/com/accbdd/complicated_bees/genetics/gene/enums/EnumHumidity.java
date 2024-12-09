@@ -31,7 +31,7 @@ public enum EnumHumidity {
     }
 
     public static EnumHumidity getFromBiome(Holder<Biome> biome) {
-        return getFromValue(((BiomeAccessor) biome.value()).getClimateSettings().downfall());
+        return getFromValue(((BiomeAccessor) (Object) biome.value()).getClimateSettings().downfall());
     }
 
     public static EnumHumidity getFromPosition(Level level, BlockPos pos) {

@@ -97,7 +97,7 @@ public class ApiaryBlock extends BaseEntityBlock {
             while (!apiary.outputBuffer.empty()) {
                 Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), apiary.outputBuffer.pop());
             }
-            CombinedSlottedStorage<ItemVariant, ItemStackHandler> handler = apiary.getItemHandler().orElseThrow(() -> new RuntimeException("no item handler found!"));
+            CombinedSlottedStorage<ItemVariant, ItemStackHandler> handler = apiary.getItemHandler();
             for (int i = 0; i < handler.getSlots().size(); i++) {
                 SingleSlotStorage<ItemVariant> slot = handler.getSlot(i);
                 Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), slot.getResource().toStack((int) slot.getAmount()));

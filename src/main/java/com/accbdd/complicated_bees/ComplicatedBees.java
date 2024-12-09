@@ -31,6 +31,8 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -155,6 +157,31 @@ public class ComplicatedBees implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPING.register(this::serverStopping);
+
+		//noinspection UnstableApiUsage
+		ItemStorage.SIDED.registerForBlockEntity((apiaryBlockEntity, direction) -> {
+            if (direction == null) {
+                return apiaryBlockEntity.getItemHandler();
+            }
+            if (direction == Direction.DOWN) {
+                return apiaryBlockEntity.getOutputItems();
+            }
+            return apiaryBlockEntity.getBeeItems();
+        }, BlockEntitiesRegistration.APIARY_ENTITY.get());
+        //noinspection UnstableApiUsage
+        ItemStorage.SIDED.registerForBlockEntity((centrifugeBlockEntity, direction) -> {
+            if (direction == null) {
+                return centrifugeBlockEntity.getItemHandler();
+            }
+            if (direction == Direction.DOWN) {
+                return centrifugeBlockEntity.getOutputItems();
+            }
+            return centrifugeBlockEntity.getInputItems();
+        }, BlockEntitiesRegistration.CENTRIFUGE_ENTITY.get());
+        //noinspection UnstableApiUsage
+        ItemStorage.SIDED.registerForBlockEntity((generatorBlockEntity, direction) -> {
+            return generatorBlockEntity.getItems();
+        }, BlockEntitiesRegistration.GENERATOR_BLOCK_ENTITY.get());
     }
 
     public void registerDatapackRegistries() {

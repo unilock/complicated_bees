@@ -135,8 +135,8 @@ public class CentrifugeBlockEntity extends BlockEntity {
         return outputItems;
     }
 
-    public Optional<CombinedSlottedStorage<ItemVariant, ItemStackHandler>> getItemHandler() {
-        return Optional.of(itemHandler);
+    public CombinedSlottedStorage<ItemVariant, ItemStackHandler> getItemHandler() {
+        return itemHandler;
     }
 
 //    public LazyOptional<IItemHandler> getInputItemHandler() {

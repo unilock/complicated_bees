@@ -36,7 +36,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Stack;
 
@@ -171,8 +170,8 @@ public class ApiaryBlockEntity extends BlockEntity {
         return frameItems;
     }
 
-    public Optional<CombinedSlottedStorage<ItemVariant, ItemStackHandler>> getItemHandler() {
-        return Optional.of(itemHandler);
+    public CombinedSlottedStorage<ItemVariant, ItemStackHandler> getItemHandler() {
+        return itemHandler;
     }
 
 //    public LazyOptional<IItemHandler> getBeeItemHandler() {

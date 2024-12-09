@@ -115,7 +115,7 @@ public class CentrifugeBlock extends BaseEntityBlock {
             while (!centrifuge.outputBuffer.empty()) {
                 Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), centrifuge.outputBuffer.pop());
             }
-            CombinedSlottedStorage<ItemVariant, ItemStackHandler> handler = centrifuge.getItemHandler().orElseThrow(() -> new RuntimeException("item handler not found!"));
+            CombinedSlottedStorage<ItemVariant, ItemStackHandler> handler = centrifuge.getItemHandler();
             for (int i = 0; i < handler.getSlots().size(); i++) {
                 SingleSlotStorage<ItemVariant> slot = handler.getSlot(i);
                 Containers.dropItemStack(pLevel, pPos.getX(), pPos.getY(), pPos.getZ(), slot.getResource().toStack((int) slot.getAmount()));

@@ -1,9 +1,7 @@
 package com.accbdd.complicated_bees;
 
 import com.accbdd.complicated_bees.block.BeeNestBlock;
-import com.accbdd.complicated_bees.client.ColorHandlers;
 import com.accbdd.complicated_bees.config.Config;
-import com.accbdd.complicated_bees.datagen.DataGenerators;
 import com.accbdd.complicated_bees.datagen.condition.ItemEnabledCondition;
 import com.accbdd.complicated_bees.genetics.Comb;
 import com.accbdd.complicated_bees.genetics.GeneticHelper;
@@ -25,7 +23,6 @@ import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.accbdd.complicated_bees.registry.MenuRegistration;
 import com.accbdd.complicated_bees.registry.MutationRegistration;
 import com.accbdd.complicated_bees.registry.SpeciesRegistration;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
@@ -33,7 +30,6 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -140,29 +136,20 @@ public class ComplicatedBees implements ModInitializer {
     @Override
     public void onInitialize() {
         this.registerSerializers();
-		this.registerRegistries();
         this.registerDatapackRegistries();
-        modEventBus.addListener(DataGenerators::generate);
-
-		// TODO: move to client mod init
-		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-			modEventBus.addListener(ColorHandlers::registerItemColorHandlers);
-			modEventBus.addListener(ColorHandlers::registerBlockColorHandlers);
-		}
+//        modEventBus.addListener(DataGenerators::generate);
 
         BlocksRegistration.register();
         ItemsRegistration.register();
-        BlockEntitiesRegistration.BLOCK_ENTITIES.register(modEventBus);
-        MenuRegistration.MENU_TYPES.register(modEventBus);
+        BlockEntitiesRegistration.register();
+        MenuRegistration.register();
         GeneRegistration.register();
-        BeeEffectRegistration.EFFECTS.register(modEventBus);
-        MutationRegistration.MUTATION_CONDITIONS.register(modEventBus);
-        EntitiesRegistration.ENTITY_TYPE.register(modEventBus);
+        BeeEffectRegistration.register();
+        MutationRegistration.register();
+        EntitiesRegistration.register();
         EsotericRegistration.register();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
-
-        CREATIVE_MODE_TABS.register(modEventBus);
 
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
     }
@@ -203,16 +190,4 @@ public class ComplicatedBees implements ModInitializer {
         LOGGER.info("Registered {} mutations", server.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} flowers", server.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
     }
-
-	// TODO: move to client mod init
-//	@SubscribeEvent
-//	public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
-//		event.register(OptimizedBeeModelLoader.ID.getPath(), new OptimizedBeeModelLoader());
-//	}
-//
-//	@SubscribeEvent
-//	public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-//		event.registerSpriteSet(EsotericRegistration.BEE_PARTICLE.get(),
-//				BeeParticle.Provider::new);
-//	}
 }

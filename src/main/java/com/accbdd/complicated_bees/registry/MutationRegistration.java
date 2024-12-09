@@ -8,27 +8,23 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryBuilder;
 
 import java.util.function.Supplier;
 
 import static com.accbdd.complicated_bees.ComplicatedBees.MODID;
+import static com.accbdd.complicated_bees.ComplicatedBees.MUTATION_CONDITION_REGISTRY;
 
 public class MutationRegistration {
     public static final ResourceKey<Registry<Mutation>> MUTATION_REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(MODID, "mutation"));
 
-    public static final ResourceLocation MUTATION_CONDITION_KEY = new ResourceLocation(MODID, "mutation_condition");
-    public static final RegistryBuilder<IMutationCondition> MUTATION_CONDITION_REGISTRY = RegistryBuilder.of(MUTATION_CONDITION_KEY);
+    public static final Supplier<IMutationCondition> BLOCK_UNDER = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, BlockUnderCondition.ID), new BlockUnderCondition(Blocks.AIR));
+    public static final Supplier<IMutationCondition> ECSTATIC = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, EcstaticCondition.ID), new EcstaticCondition());
+    public static final Supplier<IMutationCondition> DAYTIME = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, DaytimeCondition.ID), new DaytimeCondition());
+    public static final Supplier<IMutationCondition> NIGHTTIME = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, NighttimeCondition.ID), new NighttimeCondition());
+    public static final Supplier<IMutationCondition> DOWNFALL = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, DownfallCondition.ID), new DownfallCondition());
+    public static final Supplier<IMutationCondition> HUMIDITY = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, HumidityCondition.ID), new HumidityCondition(EnumHumidity.NORMAL, EnumHumidity.NORMAL));
+    public static final Supplier<IMutationCondition> TEMPERATURE = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, TemperatureCondition.ID), new TemperatureCondition(EnumTemperature.NORMAL, EnumTemperature.NORMAL));
+    public static final Supplier<IMutationCondition> DIMENSION = () -> Registry.register(MUTATION_CONDITION_REGISTRY.get(), new ResourceLocation(MODID, DimensionCondition.ID), new DimensionCondition(new ResourceLocation("minecraft:overworld")));
 
-    public static final DeferredRegister<IMutationCondition> MUTATION_CONDITIONS = DeferredRegister.create(MUTATION_CONDITION_KEY, MODID);
-
-    public static final Supplier<IMutationCondition> BLOCK_UNDER = MUTATION_CONDITIONS.register(BlockUnderCondition.ID, () -> new BlockUnderCondition(Blocks.AIR));
-    public static final Supplier<IMutationCondition> ECSTATIC = MUTATION_CONDITIONS.register(EcstaticCondition.ID, EcstaticCondition::new);
-    public static final Supplier<IMutationCondition> DAYTIME = MUTATION_CONDITIONS.register(DaytimeCondition.ID, DaytimeCondition::new);
-    public static final Supplier<IMutationCondition> NIGHTTIME = MUTATION_CONDITIONS.register(NighttimeCondition.ID, NighttimeCondition::new);
-    public static final Supplier<IMutationCondition> DOWNFALL = MUTATION_CONDITIONS.register(DownfallCondition.ID, DownfallCondition::new);
-    public static final Supplier<IMutationCondition> HUMIDITY = MUTATION_CONDITIONS.register(HumidityCondition.ID, () -> new HumidityCondition(EnumHumidity.NORMAL, EnumHumidity.NORMAL));
-    public static final Supplier<IMutationCondition> TEMPERATURE = MUTATION_CONDITIONS.register(TemperatureCondition.ID, () -> new TemperatureCondition(EnumTemperature.NORMAL, EnumTemperature.NORMAL));
-    public static final Supplier<IMutationCondition> DIMENSION = MUTATION_CONDITIONS.register(DimensionCondition.ID, () -> new DimensionCondition(new ResourceLocation("minecraft:overworld")));
+    public static void register() {}
 }

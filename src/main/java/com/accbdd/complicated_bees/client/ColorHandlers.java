@@ -6,22 +6,19 @@ import com.accbdd.complicated_bees.item.BeeItem;
 import com.accbdd.complicated_bees.item.CombItem;
 import com.accbdd.complicated_bees.registry.BlocksRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ColorHandlers {
-    @SubscribeEvent
-    public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register(BeeItem::getItemColor, ItemsRegistration.DRONE.get(), ItemsRegistration.PRINCESS.get(), ItemsRegistration.QUEEN.get());
-        event.register(CombItem::getItemColor, ItemsRegistration.COMB.get());
-        event.register(BeeNestBlock::getItemColor, ItemsRegistration.BEE_NEST.get());
+    public static void registerItemColorHandlers() {
+        ColorProviderRegistry.ITEM.register(BeeItem::getItemColor, ItemsRegistration.DRONE.get(), ItemsRegistration.PRINCESS.get(), ItemsRegistration.QUEEN.get());
+        ColorProviderRegistry.ITEM.register(CombItem::getItemColor, ItemsRegistration.COMB.get());
+        ColorProviderRegistry.ITEM.register(BeeNestBlock::getItemColor, ItemsRegistration.BEE_NEST.get());
     }
 
-    @SubscribeEvent
-    public static void registerBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register(BeeNestBlockEntity::getNestColor, BlocksRegistration.BEE_NEST.get());
+    public static void registerBlockColorHandlers() {
+        ColorProviderRegistry.BLOCK.register(BeeNestBlockEntity::getNestColor, BlocksRegistration.BEE_NEST.get());
     }
 }

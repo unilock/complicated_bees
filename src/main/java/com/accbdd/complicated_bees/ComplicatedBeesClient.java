@@ -1,6 +1,7 @@
 package com.accbdd.complicated_bees;
 
-import com.accbdd.complicated_bees.client.BeeModel;
+import com.accbdd.complicated_bees.client.ColorHandlers;
+import com.accbdd.complicated_bees.client.OptimizedBeeModelLoader;
 import com.accbdd.complicated_bees.particle.BeeParticle;
 import com.accbdd.complicated_bees.registry.EntitiesRegistration;
 import com.accbdd.complicated_bees.registry.EsotericRegistration;
@@ -25,12 +26,15 @@ public class ComplicatedBeesClient implements ClientModInitializer {
         MenuScreens.register(MenuRegistration.GENERATOR_MENU.get(), GeneratorScreen::new);
         MenuScreens.register(MenuRegistration.ANALYZER_MENU.get(), AnalyzerScreen::new);
 
+        ColorHandlers.registerItemColorHandlers();
+        ColorHandlers.registerBlockColorHandlers();
+
         registerParticleProviders();
     }
 
     @SubscribeEvent
     public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
-        event.register(BeeModel.Loader.ID.getPath(), BeeModel.Loader.INSTANCE);
+        event.register(OptimizedBeeModelLoader.ID.getPath(), new OptimizedBeeModelLoader());
     }
 
     public static void registerParticleProviders() {

@@ -6,7 +6,8 @@ import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.fabricators_of_create.porting_lib.models.geometry.IGeometryLoader;
+import io.github.fabricators_of_create.porting_lib.models.geometry.IUnbakedGeometry;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -17,14 +18,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.BakedModelWrapper;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-import net.minecraftforge.client.model.geometry.IGeometryLoader;
-import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -44,7 +39,7 @@ public class OptimizedBeeModelLoader implements IGeometryLoader<OptimizedBeeMode
     public record Variant(BeeModel drone, BeeModel princess, BeeModel queen) {
     }
 
-    static class BeeGeometry implements IUnbakedGeometry<BeeGeometry> {
+    public static class BeeGeometry implements IUnbakedGeometry<BeeGeometry> {
         private final UnbakedModel model;
 
         BeeGeometry(UnbakedModel model) {
@@ -52,13 +47,13 @@ public class OptimizedBeeModelLoader implements IGeometryLoader<OptimizedBeeMode
         }
 
         @Override
-        public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
+        public BakedModel bake(BlockModel blockModel, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation, boolean b) {
             BakedModel bakedModel = model.bake(baker, spriteGetter, modelState, modelLocation);
             return new BeeOverrideModel(bakedModel, baker, modelState, spriteGetter);
         }
 
         @Override
-        public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
+        public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, BlockModel context) {
             model.resolveParents(modelGetter);
         }
     }
@@ -99,19 +94,6 @@ public class OptimizedBeeModelLoader implements IGeometryLoader<OptimizedBeeMode
             }
             return List.of();
         }
-
-        @Override
-        public BakedModel applyTransform(ItemDisplayContext ctx, PoseStack poseStack, boolean applyLeftHandTransform)
-        {
-            getTransforms().getTransform(ctx).apply(applyLeftHandTransform, poseStack);
-            return this;
-        }
-
-        @Override
-        public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous)
-        {
-            return List.of(this);
-        }
     }
 
     private static class BeeOverrideList extends ItemOverrides {
@@ -134,8 +116,8 @@ public class OptimizedBeeModelLoader implements IGeometryLoader<OptimizedBeeMode
                 BeeModel[] beeModels = new BeeModel[3];
                 for (int i = 0; i < 3; i++) {
                     ResourceLocation modelLoc = spec.getModels().get(i);
-                    BakedModel bakedModelOverride = baker.bake(modelLoc, state, sprites);
-                    List<BakedQuad> quads = new ArrayList<>(bakedModelOverride.getQuads(null, null, RandomSource.create(), ModelData.EMPTY, null));
+                    BakedModel bakedModelOverride = baker.bake(modelLoc, state);
+                    List<BakedQuad> quads = new ArrayList<>(bakedModelOverride.getQuads(null, null, RandomSource.create()));
                     beeModels[i] = new BeeModel(bakedModel, quads);
                 }
                 return new Variant(beeModels[0], beeModels[1], beeModels[2]);

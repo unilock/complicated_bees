@@ -2,6 +2,7 @@ package com.accbdd.complicated_bees.entity;
 
 import com.accbdd.complicated_bees.registry.EntitiesRegistration;
 import com.accbdd.complicated_bees.registry.EsotericRegistration;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -50,7 +52,7 @@ public class BeeStaffProjectile extends Projectile implements ItemSupplier {
 
     public void tick() {
         Entity entity = this.getOwner();
-        if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().isAreaLoaded(this.blockPosition(), 2)) {
+        if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && isAreaLoaded(this.level(), this.blockPosition(), 2)) {
             super.tick();
 
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
@@ -73,6 +75,10 @@ public class BeeStaffProjectile extends Projectile implements ItemSupplier {
         } else {
             this.discard();
         }
+    }
+
+    private static boolean isAreaLoaded(LevelReader level, BlockPos center, int range) {
+        return level.hasChunksAt(center.offset(-range, -range, -range), center.offset(range, range, range));
     }
 
     @Override

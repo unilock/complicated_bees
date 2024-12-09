@@ -47,9 +47,9 @@ public class AnalyzerScreen extends AbstractContainerScreen<AnalyzerMenu> {
         if (this.menu.getCarried().isEmpty()) {
             if (this.hoveredSlot != null && this.hoveredSlot.hasItem()) {
                 ItemStack itemstack = this.hoveredSlot.getItem();
-                graphics.renderTooltip(this.font, this.getTooltipFromContainerItem(itemstack), itemstack.getTooltipImage(), itemstack, mousex, mousey);
+                graphics.renderTooltip(this.font, itemstack, mousex, mousey);
             } else if (widget.hoveredStack != null) {
-                graphics.renderTooltip(this.font, this.getTooltipFromContainerItem(widget.hoveredStack), widget.hoveredStack.getTooltipImage(), widget.hoveredStack, mousex, mousey);
+                graphics.renderTooltip(this.font, widget.hoveredStack, mousex, mousey);
             } else if (widget.geneTooltip != null) {
                 graphics.renderTooltip(this.font, widget.geneTooltip, mousex, mousey);
             }

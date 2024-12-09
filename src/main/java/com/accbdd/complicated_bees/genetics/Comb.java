@@ -5,7 +5,6 @@ import com.accbdd.complicated_bees.registry.CombRegistration;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +33,7 @@ public class Comb {
     public ResourceLocation getId() {
         ResourceLocation id;
         try {
-            id = Minecraft.getInstance().getConnection().registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().getKey(this);
+            id = GeneticHelper.getRegistryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().getKey(this);
         } catch (NullPointerException e) {
             return new ResourceLocation(MODID, "null");
         }

@@ -46,8 +46,8 @@ public class ComplicatedBeesJEI implements IModPlugin {
         RecipeManager manager = Minecraft.getInstance().getConnection().getRecipeManager();
         ComplicatedBees.LOGGER.debug("registering recipes for JEI");
         registration.addRecipes(CentrifugeRecipeCategory.TYPE, manager.getAllRecipesFor(EsotericRegistration.CENTRIFUGE_RECIPE).stream().toList());
-        registration.addRecipes(BeeProduceRecipeCategory.TYPE, Minecraft.getInstance().getConnection().registryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().stream().toList());
-        registration.addRecipes(MutationRecipeCategory.TYPE, Minecraft.getInstance().getConnection().registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList());
+        registration.addRecipes(BeeProduceRecipeCategory.TYPE, GeneticHelper.getRegistryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().stream().toList());
+        registration.addRecipes(MutationRecipeCategory.TYPE, GeneticHelper.getRegistryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList());
     }
 
     @Override

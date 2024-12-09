@@ -155,7 +155,7 @@ public class GeneticHelper {
             } else if (geneEntry.getValue() instanceof GeneSpecies) {
                 Species speciesA = (Species) geneA.get();
                 Species speciesB = (Species) geneB.get();
-                for (Mutation mutation : ComplicatedBees.currentServer.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList()) {
+                for (Mutation mutation : getRegistryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().stream().toList()) {
                     if ((mutation.getFirstSpecies() == speciesA && mutation.getSecondSpecies() == speciesB) || (mutation.getSecondSpecies() == speciesA && mutation.getFirstSpecies() == speciesB)) {
                         boolean canMutate = true;
                         for (IMutationCondition condition : mutation.getConditions())

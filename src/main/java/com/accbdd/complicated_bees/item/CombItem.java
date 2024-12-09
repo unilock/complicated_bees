@@ -1,11 +1,8 @@
 package com.accbdd.complicated_bees.item;
 
-import com.accbdd.complicated_bees.ComplicatedBees;
 import com.accbdd.complicated_bees.genetics.Comb;
+import com.accbdd.complicated_bees.genetics.GeneticHelper;
 import com.accbdd.complicated_bees.registry.CombRegistration;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,17 +21,8 @@ public class CombItem extends Item {
     }
 
     public static Comb getComb(ItemStack stack) {
-        Comb comb = Comb.NULL;
         //get comb string from nbt, return comb from registry
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            if (Minecraft.getInstance().getConnection() == null) {
-                return comb;
-            }
-            comb = Minecraft.getInstance().getConnection().registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().get(ResourceLocation.tryParse(stack.getOrCreateTag().getString(COMB_TYPE_TAG)));
-        } else {
-            comb = ComplicatedBees.currentServer.registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().get(ResourceLocation.tryParse(stack.getOrCreateTag().getString(COMB_TYPE_TAG)));
-        }
-        return comb;
+        return GeneticHelper.getRegistryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().get(ResourceLocation.tryParse(stack.getOrCreateTag().getString(COMB_TYPE_TAG)));
     }
 
     public static ItemStack setComb(ItemStack stack, ResourceLocation comb) {
@@ -52,7 +40,7 @@ public class CombItem extends Item {
 
     public static int getItemColor(ItemStack stack, int tintIndex) {
         ResourceLocation combLocation = ResourceLocation.tryParse(stack.getOrCreateTag().getString(COMB_TYPE_TAG));
-        Registry<Comb> registry = Objects.requireNonNull(Minecraft.getInstance().getConnection()).registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get();
+        Registry<Comb> registry = GeneticHelper.getRegistryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get();
         if (combLocation != null) {
             switch (tintIndex) {
                 case 0:

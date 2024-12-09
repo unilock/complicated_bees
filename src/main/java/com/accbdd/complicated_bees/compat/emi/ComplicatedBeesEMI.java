@@ -17,7 +17,6 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiRenderable;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +49,7 @@ public class ComplicatedBeesEMI implements EmiPlugin {
         registry.addWorkstation(MUTATION_CATEGORY, APIARY);
 
         RecipeManager manager = registry.getRecipeManager();
-        RegistryAccess registryAccess = Minecraft.getInstance().level.registryAccess();
+        RegistryAccess registryAccess = GeneticHelper.getRegistryAccess();
 
         manager.getAllRecipesFor(EsotericRegistration.CENTRIFUGE_RECIPE)
                 .stream()

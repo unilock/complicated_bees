@@ -2,6 +2,7 @@ package com.accbdd.complicated_bees.compat.emi.recipe;
 
 import com.accbdd.complicated_bees.ComplicatedBees;
 import com.accbdd.complicated_bees.compat.emi.ComplicatedBeesEMI;
+import com.accbdd.complicated_bees.genetics.GeneticHelper;
 import com.accbdd.complicated_bees.genetics.Species;
 import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.accbdd.complicated_bees.registry.SpeciesRegistration;
@@ -10,7 +11,6 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public class BeeProduceEmiRecipe implements EmiRecipe {
     private final List<EmiIngredient> catalysts;
 
     public BeeProduceEmiRecipe(Species species) {
-        ResourceLocation speciesId = Minecraft.getInstance().level.registryAccess().registryOrThrow(SpeciesRegistration.SPECIES_REGISTRY_KEY).getKey(species);
+        ResourceLocation speciesId = GeneticHelper.getRegistryAccess().registryOrThrow(SpeciesRegistration.SPECIES_REGISTRY_KEY).getKey(species);
         this.id = new ResourceLocation(ComplicatedBees.MODID, "/bee_produce/" + speciesId.toString().replace(":", "/"));
 
         this.beeInput = EmiStack.of(species.toStack(ItemsRegistration.QUEEN));

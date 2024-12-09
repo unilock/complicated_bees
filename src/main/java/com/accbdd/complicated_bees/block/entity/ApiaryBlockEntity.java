@@ -1,6 +1,5 @@
 package com.accbdd.complicated_bees.block.entity;
 
-import com.accbdd.complicated_bees.ComplicatedBees;
 import com.accbdd.complicated_bees.config.Config;
 import com.accbdd.complicated_bees.genetics.*;
 import com.accbdd.complicated_bees.genetics.effect.IBeeEffect;
@@ -550,7 +549,7 @@ public class ApiaryBlockEntity extends BlockEntity implements ExtendedScreenHand
     }
 
     private void checkFlowerCache(ItemStack bee) {
-        Flower flower = ComplicatedBees.currentServer.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
+        Flower flower = GeneticHelper.getRegistryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
                 .get(((GeneFlower) GeneticHelper.getGene(bee, GeneFlower.ID, true)).get());
         Level level = getLevel();
         if (flower == null || level == null) {
@@ -572,7 +571,7 @@ public class ApiaryBlockEntity extends BlockEntity implements ExtendedScreenHand
 
     private void rebuildFlowerCache(ItemStack bee) {
         clearFlowerCache();
-        Flower flower = ComplicatedBees.currentServer.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
+        Flower flower = GeneticHelper.getRegistryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get()
                 .get(((GeneFlower) GeneticHelper.getGene(bee, GeneFlower.ID, true)).get());
 
         if (flower == null) {

@@ -22,7 +22,7 @@ public class ComplicatedHiveFeature extends Feature<ComplicatedHiveFeatureConfig
         BlockPos blockpos = context.origin();
 
         worldgenlevel.setBlock(blockpos, BlocksRegistration.BEE_NEST.defaultBlockState(), 2);
-        context.level().getBlockEntity(blockpos, BlockEntitiesRegistration.BEE_NEST_ENTITY).ifPresent(be -> be.setSpecies(Species.getFromResourceLocation(ResourceLocation.tryParse(config.speciesKey()))));
+        context.level().getBlockEntity(blockpos, BlockEntitiesRegistration.BEE_NEST_ENTITY).ifPresent(be -> be.setSpecies(Species.getFromResourceLocation(context.level().registryAccess(), ResourceLocation.tryParse(config.speciesKey()))));
 
         return true;
     }

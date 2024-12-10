@@ -159,7 +159,7 @@ public class ComplicatedBees implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTING.register(this::serverStarting);
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
-        ServerLifecycleEvents.SERVER_STOPPING.register(this::serverStopping);
+        ServerLifecycleEvents.SERVER_STOPPED.register(this::serverStopped);
 
         EnergyStorage.SIDED.registerForBlockEntity((centrifugeBlockEntity, direction) -> {
             return centrifugeBlockEntity.getEnergyHandler();
@@ -235,7 +235,7 @@ public class ComplicatedBees implements ModInitializer {
         LOGGER.info("Registered {} flowers", server.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
     }
 
-    public void serverStopping(MinecraftServer server) {
+    public void serverStopped(MinecraftServer server) {
         currentServer = null;
     }
 }

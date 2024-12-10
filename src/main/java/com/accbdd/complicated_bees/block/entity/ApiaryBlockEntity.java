@@ -496,7 +496,7 @@ public class ApiaryBlockEntity extends BlockEntity implements ExtendedScreenHand
             for (int i = 0; i < (int) GeneticHelper.getGeneValue(queen, GeneFertility.ID, true); i++) {
                 outputBuffer.add(GeneticHelper.getOffspring(queen, ItemsRegistration.DRONE, getLevel(), getBlockPos(), mutationMod));
             }
-            TransferUtilExtras.extractAnySlot(beeItems, BEE_SLOT, 1);
+            beeItems.setStackInSlot(BEE_SLOT, ItemStack.EMPTY);
             setChanged();
         }
     }

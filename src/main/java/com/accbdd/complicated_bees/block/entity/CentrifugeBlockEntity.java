@@ -341,7 +341,7 @@ public class CentrifugeBlockEntity extends BlockEntity implements ExtendedScreen
         int stackCount = stack.getCount();
         for (int i = 0; i < OUTPUT_SLOT_COUNT; i++) {
             long inserted = TransferUtilExtras.simulateInsertSlot(outputItems, i, stack);
-            canInsert = canInsert || (inserted < stackCount);
+            canInsert = canInsert || (inserted == stackCount);
         }
         return canInsert;
     }

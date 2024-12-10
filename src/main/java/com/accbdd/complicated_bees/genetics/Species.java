@@ -6,7 +6,6 @@ import com.accbdd.complicated_bees.registry.ItemsRegistration;
 import com.accbdd.complicated_bees.registry.SpeciesRegistration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -73,11 +72,7 @@ public class Species {
     }
 
     public static Species getFromResourceLocation(ResourceLocation loc) {
-        return getFromResourceLocation(GeneticHelper.getRegistryAccess(), loc);
-    }
-
-    public static Species getFromResourceLocation(RegistryAccess registryAccess, ResourceLocation loc) {
-        return registryAccess.registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().get(loc);
+        return GeneticHelper.getRegistryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().get(loc);
     }
 
     public boolean isFoil() {

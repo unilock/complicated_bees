@@ -157,6 +157,7 @@ public class ComplicatedBees implements ModInitializer {
 
         ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 
+        ServerLifecycleEvents.SERVER_STARTING.register(this::serverStarting);
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPING.register(this::serverStopping);
 
@@ -223,12 +224,15 @@ public class ComplicatedBees implements ModInitializer {
         ResourceConditions.register(ItemEnabledCondition.ID, ItemEnabledCondition::test);
     }
 
+    public void serverStarting(MinecraftServer server) {
+        currentServer = server;
+    }
+
     public void serverStarted(MinecraftServer server) {
         LOGGER.info("Registered {} species", server.registryAccess().registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} combs", server.registryAccess().registry(CombRegistration.COMB_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} mutations", server.registryAccess().registry(MutationRegistration.MUTATION_REGISTRY_KEY).get().size());
         LOGGER.info("Registered {} flowers", server.registryAccess().registry(FlowerRegistration.FLOWER_REGISTRY_KEY).get().size());
-        currentServer = server;
     }
 
     public void serverStopping(MinecraftServer server) {

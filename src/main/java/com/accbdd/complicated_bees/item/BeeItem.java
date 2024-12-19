@@ -46,17 +46,12 @@ public class BeeItem extends Item {
     @Override
     public @NotNull Component getName(ItemStack stack) {
         Species primary = GeneticHelper.getSpecies(stack, true);
-        Species secondary = GeneticHelper.getSpecies(stack, false);
         MutableComponent component = Component.empty();
 
         component.append(GeneticHelper.getTranslationKey(primary));
 
         if (primary == null) {
             return component;
-        }
-
-        if (!primary.equals(secondary)) {
-            component.append("-").append(GeneticHelper.getTranslationKey(secondary));
         }
         component.append(" ").append(Component.translatable(getDescriptionId()));
 
@@ -89,6 +84,10 @@ public class BeeItem extends Item {
             components.add(Component.translatable("gui.complicated_bees.more_info").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
         } else if (Minecraft.getInstance().level != null) {
             Chromosome primary = GeneticHelper.getChromosome(stack, true);
+            MutableComponent hybridName = GeneticHelper.getSpeciesHybridName(stack);
+            if (hybridName != null)
+                components.add(hybridName
+                        .withStyle(ChatFormatting.BLUE));
             components.add(primary.getGene(GeneLifespan.ID).getTranslationKey()
                     .append(" ")
                     .append(Component.translatable("gene.complicated_bees.lifespan_label"))

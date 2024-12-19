@@ -123,9 +123,9 @@ public class ComplicatedBees implements ModInitializer {
                 if (access != null) {
                     Set<Map.Entry<ResourceKey<Species>, Species>> speciesSet = access.registry(SpeciesRegistration.SPECIES_REGISTRY_KEY).get().entrySet();
                     for (Map.Entry<ResourceKey<Species>, Species> entry : speciesSet) {
-                        output.accept(GeneticHelper.setBothGenome(ItemsRegistration.DRONE.getDefaultInstance(), entry.getValue().getDefaultChromosome()));
-                        output.accept(GeneticHelper.setBothGenome(ItemsRegistration.PRINCESS.getDefaultInstance(), entry.getValue().getDefaultChromosome()));
-                        output.accept(GeneticHelper.setBothGenome(ItemsRegistration.QUEEN.getDefaultInstance(), entry.getValue().getDefaultChromosome()));
+                        output.accept(GeneticHelper.setGenome(ItemsRegistration.DRONE.getDefaultInstance(), entry.getValue().getDefaultChromosome()));
+                        output.accept(GeneticHelper.setGenome(ItemsRegistration.PRINCESS.getDefaultInstance(), entry.getValue().getDefaultChromosome()));
+                        output.accept(GeneticHelper.setGenome(ItemsRegistration.QUEEN.getDefaultInstance(), entry.getValue().getDefaultChromosome()));
                     }
                     for (ResourceLocation id : access.registry(CombRegistration.COMB_REGISTRY_KEY).get().keySet()) {
                         output.accept(CombItem.setComb(ItemsRegistration.COMB.getDefaultInstance(), id));
